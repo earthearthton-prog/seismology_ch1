@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地震學大師：十大核心探索</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @keyframes rayPath { 0% { stroke-dashoffset: 300; } 100% { stroke-dashoffset: 0; } }
+    .seismic-ray { stroke-dasharray: 300; animation: rayPath 3s infinite linear; }
+    
+    @keyframes beamMove { 0% { stroke-dashoffset: 200; } 100% { stroke-dashoffset: 0; } }
+    .beam { stroke-dasharray: 200; animation: beamMove 2s infinite linear; }
+    
+    @keyframes subduct { 0% { transform: translate(0, 0); } 100% { transform: translate(15px, 15px); } }
+    .subducting-plate { animation: subduct 3s infinite alternate ease-in-out; }
+    
+    @keyframes shearStrain { 0% { transform: skewX(0deg); } 50% { transform: skewX(20deg); } 100% { transform: skewX(0deg); } }
+    .strain-box { animation: shearStrain 3s infinite ease-in-out; transform-origin: bottom; }
+    
+    @keyframes pushForce { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(10px); } }
+    .force-arrow { animation: pushForce 3s infinite ease-in-out; }
+
+    /* 折疊面板過渡動畫 */
+    .topic-content {
+      transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+      max-height: 0;
+      opacity: 0;
+    }
+    .topic-content.open {
+      max-height: 1200px;
+      opacity: 1;
+    }
+    .topic-card.open {
+      box-shadow: 0 0 0 2px #818cf8; /* ring-2 ring-indigo-400 */
+    }
+    .chevron {
+      transition: transform 0.3s;
+    }
+    .chevron.open {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body class="min-h-screen p-4 font-sans bg-slate-100 text-slate-800 md:p-8">
+
+  <div class="max-w-4xl mx-auto space-y-8">
+    
+    <header class="p-8 text-center bg-white shadow-md rounded-2xl border-t-8 border-indigo-600">
+      <h1 class="mb-4 text-3xl font-extrabold text-slate-800 md:text-5xl">
+        地震學大師：十大核心探索
+      </h1>
+      <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+        從地球深處的物理機制，到保護社會安全的核武監測。跟著大師的腳步，一步步揭開地震學的神秘面紗。
+      </p>
+    </header>
+
+    <div class="flex items-start p-6 bg-blue-50 border-l-4 border-blue-500 rounded-r-xl shadow-sm">
+      <i data-lucide="lightbulb" class="flex-shrink-0 w-6 h-6 mt-1 mr-4 text-blue-600"></i>
+      <div>
+        <h3 class="mb-2 font-bold text-blue-900">學習指南</h3>
+        <p class="text-sm leading-relaxed text-blue-800">
+          這份教材源自頂尖的大學地球科學課程。點擊下方各個主題卡片即可展開閱讀。如果遇到帶有動畫的主題，別忘了觀察圖形的變化，這會幫助你更好地理解抽象的物理模型！
+        </p>
+      </div>
+    </div>
+
+    <div id="topics-container" class="space-y-4">
+      </div>
+
+    <div class="p-8 text-center text-white shadow-lg bg-slate-800 rounded-2xl">
+      <h3 class="mb-4 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">大師的終極思考題</h3>
+      <p class="mb-6 leading-relaxed text-slate-300 max-w-2xl mx-auto">
+        在「主題 9」中我們學到，天然地震與核爆所產生的波形特徵（體波與面波的比例）截然不同。
+        <br/><br/>
+        既然如此，你覺得在未來，我們能不能訓練<strong>人工智慧（AI）</strong>直接讀取地震儀的數據，並在一秒內自動發出「這是大地震，還是某國的秘密核試爆」的警報呢？AI 在這裡可能會遇到什麼挑戰？
+      </p>
+    </div>
+
+  </div>
+
+  <script>
+    // 定義動畫 HTML 字串
+    const EarthAnimation = `
+      <div class="flex justify-center w-full py-6 bg-slate-800 rounded-xl">
+        <svg width="220" height="220" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="90" fill="#8B4513" stroke="#A0522D" stroke-width="4" />
+          <circle cx="100" cy="100" r="50" fill="#D2691E" />
+          <circle cx="100" cy="100" r="20" fill="#FFD700" />
+          <circle cx="100" cy="10" r="4" fill="red" />
+          <text x="110" y="15" fill="white" font-size="10">震源</text>
+          <text x="25" y="100" fill="white" font-size="10">地函 (固態)</text>
+          <text x="65" y="130" fill="white" font-size="10">外核 (液態)</text>
+          <text x="85" y="105" fill="#333" font-size="10" font-weight="bold">內核</text>
+          <path d="M 100 10 Q 150 50 145 80" fill="none" stroke="#60A5FA" stroke-width="2" class="seismic-ray" />
+          <path d="M 145 80 Q 170 40 185 30" fill="none" stroke="#34D399" stroke-width="2" class="seismic-ray" style="animation-delay: 1.5s" />
+        </svg>
+      </div>`;
+
+    const WavePhysicsAnimation = `
+      <div class="flex justify-center w-full py-6 bg-slate-800 rounded-xl">
+        <svg width="250" height="150" viewBox="0 0 250 150">
+          <rect x="0" y="0" width="250" height="75" fill="#1E293B" />
+          <rect x="0" y="75" width="250" height="75" fill="#334155" />
+          <line x1="0" y1="75" x2="250" y2="75" stroke="#94A3B8" stroke-width="2" stroke-dasharray="4,4" />
+          <text x="10" y="20" fill="#94A3B8" font-size="12">岩層 A (低速)</text>
+          <text x="10" y="140" fill="#94A3B8" font-size="12">岩層 B (高速)</text>
+          <line x1="50" y1="10" x2="125" y2="75" stroke="#FBBF24" stroke-width="3" class="beam" />
+          <line x1="125" y1="75" x2="200" y2="10" stroke="#60A5FA" stroke-width="2" class="beam" style="animation-delay: 1s" />
+          <line x1="125" y1="75" x2="175" y2="140" stroke="#34D399" stroke-width="3" class="beam" style="animation-delay: 1s" />
+          <text x="180" y="130" fill="#34D399" font-size="12">折射波</text>
+          <text x="205" y="25" fill="#60A5FA" font-size="12">反射波</text>
+        </svg>
+      </div>`;
+
+    const PlateTectonicsAnimation = `
+      <div class="flex justify-center w-full py-6 bg-slate-800 rounded-xl">
+        <svg width="250" height="150" viewBox="0 0 250 150">
+          <path d="M 120 40 L 250 40 L 250 150 L 150 150 Z" fill="#78716C" stroke="#444" stroke-width="2" />
+          <text x="160" y="60" fill="white" font-size="12">大陸板塊</text>
+          <g class="subducting-plate">
+            <path d="M -20 50 L 100 50 L 180 130 L 60 130 Z" fill="#0369A1" stroke="#444" stroke-width="2" />
+            <text x="20" y="70" fill="white" font-size="12">海洋板塊</text>
+          </g>
+          <polygon points="170,40 160,10 180,10" fill="#EF4444" />
+          <circle cx="130" cy="70" r="4" fill="#FBBF24" />
+          <circle cx="145" cy="85" r="4" fill="#FBBF24" />
+          <circle cx="160" cy="100" r="4" fill="#FBBF24" />
+          <text x="135" y="115" fill="#FBBF24" font-size="10">深層地震</text>
+        </svg>
+      </div>`;
+
+    const QuakeVsNukeChart = `
+      <div class="flex flex-col items-center w-full py-6 bg-slate-800 rounded-xl">
+        <p class="mb-4 text-sm text-center text-slate-300">體波震級 (mb) vs 面波震級 (Ms)</p>
+        <svg width="250" height="150" viewBox="0 0 250 150">
+          <line x1="30" y1="130" x2="230" y2="130" stroke="white" stroke-width="2" />
+          <line x1="30" y1="10" x2="30" y2="130" stroke="white" stroke-width="2" />
+          <text x="110" y="145" fill="white" font-size="10">面波震級 (Ms)</text>
+          <text x="5" y="75" fill="white" font-size="10" transform="rotate(-90 10,75)">體波 (mb)</text>
+          <circle cx="80" cy="100" r="4" fill="#34D399" />
+          <circle cx="120" cy="80" r="4" fill="#34D399" />
+          <circle cx="160" cy="60" r="4" fill="#34D399" />
+          <text x="170" y="65" fill="#34D399" font-size="12">天然地震</text>
+          <circle cx="60" cy="40" r="4" fill="#EF4444" />
+          <circle cx="80" cy="30" r="4" fill="#EF4444" />
+          <circle cx="90" cy="20" r="4" fill="#EF4444" />
+          <text x="100" y="25" fill="#EF4444" font-size="12">核子試爆</text>
+          <line x1="30" y1="130" x2="200" y2="40" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3,3" />
+        </svg>
+      </div>`;
+
+    const StressStrainAnimation = `
+      <div class="flex justify-center w-full py-6 bg-slate-800 rounded-xl">
+        <svg width="200" height="150" viewBox="0 0 200 150">
+          <g class="strain-box">
+            <rect x="60" y="40" width="80" height="80" fill="#6366F1" stroke="#4F46E5" stroke-width="2" fill-opacity="0.7"/>
+            <line x1="80" y1="40" x2="80" y2="120" stroke="#4F46E5" stroke-width="1" stroke-dasharray="2,2" />
+            <line x1="100" y1="40" x2="100" y2="120" stroke="#4F46E5" stroke-width="1" stroke-dasharray="2,2" />
+            <line x1="120" y1="40" x2="120" y2="120" stroke="#4F46E5" stroke-width="1" stroke-dasharray="2,2" />
+          </g>
+          <g class="force-arrow">
+            <line x1="10" y1="40" x2="50" y2="40" stroke="#FBBF24" stroke-width="3" />
+            <polygon points="50,35 60,40 50,45" fill="#FBBF24" />
+            <text x="10" y="30" fill="#FBBF24" font-size="12">剪應力 (Stress)</text>
+          </g>
+          <line x1="40" y1="120" x2="160" y2="120" stroke="#94A3B8" stroke-width="4" />
+          <text x="80" y="140" fill="white" font-size="12">物體變形 (Strain)</text>
+        </svg>
+      </div>`;
+
+    // 資料結構
+    const topics = [
+      { id: 1, category: "基礎理論", icon: "book-open", iconColor: "text-blue-500", title: "1. 地震學的定義與範疇", question: "地震學難道只研究『天然的地震』嗎？", answer: "不只！它研究的是『所有地震波』在地球介質中的傳播。", explanation: "地震學 (Seismology) 是研究固體地球中彈性波（或聲波）的科學。這些波的來源可以是自然現象，如板塊錯動引發的地震；也可以是人工事件，例如礦場採石爆破、甚至是核子武器試爆。只要能產生波並在地球內部傳播，都是地震學家研究的範疇！", animation: null },
+      { id: 2, category: "基礎理論", icon: "globe", iconColor: "text-emerald-500", title: "2. 地球內部結構的探索", question: "人類鑽井最深才十幾公里，怎麼知道地心有一層液態的外核？", answer: "我們用地震波幫地球拍「X光片」！", explanation: "因為地球深處無法直接觀測，地震波成了我們繪製地球內部圖像（地殼、地函、外核、內核）的主要工具。科學家發現，某一種地震波（S波，剪力波）無法穿透液體。當大地震發生時，地球對面的地震儀接收不到 S波，這成為了證明地球深處有一個「液態外核」的最有力證據！", animation: EarthAnimation },
+      { id: 3, category: "基礎理論", icon: "activity", iconColor: "text-purple-500", title: "3. 地震波的物理特性", question: "地震波在地底下是像直線一樣前進的嗎？", answer: "不是喔！它就像光穿過水一樣，會發生折射、反射與繞射。", explanation: "地震波的傳播行為與光波或聲波非常相似。地球內部並不是均勻的一塊大石頭，而是充滿了密度和堅硬度不同的岩層。\n當地震波從軟岩層進入硬岩層時，它的速度會改變，導致路徑發生彎曲，這就是「折射 (Refraction)」。如果遇到像地函與地核的邊界這種性質劇烈改變的地方，甚至會像照鏡子一樣發生「反射 (Reflection)」。科學家就是利用這些彎曲與反射的時間差，推算出地下構造的秘密。", animation: WavePhysicsAnimation },
+      { id: 4, category: "觀測與應用", icon: "map", iconColor: "text-orange-500", title: "4. 板塊構造論的典範轉移", question: "為什麼地震總是集中在某些特定的國家或地區？", answer: "因為地球的表面是一塊塊拼圖，而地震就發生在拼圖摩擦的邊界！", explanation: "在 1960 年代後期，地球科學界發生了「板塊構造革命」。在那之前，人們不明白為什麼中洋脊、海溝、造山運動和地震總是相伴而生。板塊構造論將這些現象完美地連結了起來：地球的外殼由多個板塊組成，它們漂浮在軟流圈上移動。當板塊互相碰撞、隱沒（例如太平洋板塊擠壓日本或台灣）或分離時，就會產生巨大的能量，引發頻繁的破壞性地震。", animation: PlateTectonicsAnimation },
+      { id: 5, category: "觀測與應用", icon: "monitor", iconColor: "text-teal-500", title: "5. 地震儀與地震紀錄分析", question: "地震儀畫出的那些上下起伏的線條，能告訴我們什麼秘密？", answer: "它就像地震的「指紋」，包含了震源有多大、以及波經過了哪些地方。", explanation: "地震圖 (Seismogram) 是地震儀記錄下來的地面運動軌跡。透過分析這些波形的振幅大小、到達時間的先後（例如跑得快的P波先到，破壞力強的S波後到），地震學家可以計算出地震發生在哪裡（定位）、能量有多大（規模），甚至能推測出斷層是上下錯動還是水平滑動（震源機制）。", animation: null },
+      { id: 6, category: "社會與防災", icon: "target", iconColor: "text-rose-500", title: "6. 地震預測的挑戰與爭議", question: "現在科技這麼發達，為什麼還不能像報天氣一樣準確預報地震？", answer: "因為地底下的物理環境太複雜了，這依然是科學界的未解之謎。", explanation: "氣象可以看雲圖，但我們無法直接看到地底 10 公里深處的岩石狀態。歷史上有許多著名的預測實驗，例如美國加州的帕克菲爾德 (Parkfield) 實驗。科學家預測該地在 1988 年至 1993 年間會發生大地震，並佈滿了監測儀器，結果地震遲至 2004 年才發生。\n這說明了：雖然我們知道哪裡「遲早」會發生地震（長期機率），但要精確指出「哪一天、幾點發生」目前仍具有極大挑戰。", animation: null },
+      { id: 7, category: "社會與防災", icon: "alert-triangle", iconColor: "text-yellow-600", title: "7. 地震對社會的危害評估", question: "地震最大的危險只有房屋倒塌嗎？", answer: "不，地震引發的「衍生災害」往往造成更慘重的傷亡。", explanation: "評估地震危害不能只看震動本身。歷史上的悲劇告訴我們衍生災害的可怕：\n例如 1556 年中國陝西大地震，引發了大規模的黃土洞穴坍塌，導致極大傷亡；而 1923 年的日本東京大地震（關東大地震），因為當時正值中午煮飯時間，傾倒的爐火引發了無法控制的城市大火。此外，海底地震引發的「海嘯 (Tsunami)」更是沿海國家的巨大威脅。", animation: null },
+      { id: 8, category: "社會與防災", icon: "radio", iconColor: "text-indigo-500", title: "8. 核子試爆監測技術", question: "如果有國家偷偷在地底試爆核彈，別人會知道嗎？", answer: "絕對逃不過國際監測系統 (IMS) 的「千里耳」。", explanation: "為了維持世界和平與條約驗證，全球建立了一個嚴密的國際監測系統 (IMS)。這個系統不只依靠地震儀來捕捉地下的震波，還結合了水聲網路（偵測海洋中的爆炸聲）以及次聲波網路（偵測大氣中低頻的聲波）。只要地球上發生不尋常的巨大能量釋放，各國的科學家馬上就能收到數據並進行分析。", animation: null },
+      { id: 9, category: "社會與防災", icon: "shield-alert", iconColor: "text-red-500", title: "9. 地震與爆炸的區分", question: "地震儀上看到的波，怎麼知道是天然地震還是核爆？", answer: "因為核彈爆炸是「向外膨脹」，而地震是「斷層滑動」，兩者產生的波形特徵完全不同！", explanation: "這是一個非常實用的技術。爆炸（如核爆）在瞬間向四面八方產生強大的壓縮力，因此會產生異常巨大的 P波（壓縮波）。\n科學家會比較一個事件的「體波震級 (mb)」與「面波震級 (Ms)」。天然地震的這兩種震級通常呈正相關；但對於核試爆來說，為了產生相同的面波震級，它的體波震級 (mb) 會顯得「異常地高」。看圖表就能一眼區分出兩者的不同群體！", animation: QuakeVsNukeChart },
+      { id: 10, category: "基礎理論", icon: "box", iconColor: "text-cyan-500", title: "10. 固體力學基礎", question: "物理學家是用什麼數學工具來研究地震波的？", answer: "他們使用「應力張量」與「運動方程式」來描述岩石的推擠與變形。", explanation: "要精確計算地震波，我們必須回到物理學的根本：固體力學。想像一塊地下的岩石被擠壓。\n施加在岩石上的力量稱為「應力 (Stress)」，而岩石因為受力而發生的形狀改變稱為「應變 (Strain)」。科學家透過複雜的數學矩陣（應力張量）來描述各個方向的力量，再利用運動方程式計算出：當力量釋放時，這股能量會以多快的速度、用什麼樣的波形傳遍整個地球。", animation: StressStrainAnimation }
+    ];
+
+    const container = document.getElementById('topics-container');
+    let openTopicId = 1; // 預設打開第一個
+
+    // 生成 DOM
+    topics.forEach(topic => {
+      const isOpen = topic.id === openTopicId;
+      
+      const topicDiv = document.createElement('div');
+      topicDiv.className = `topic-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:border-indigo-300 ${isOpen ? 'open' : ''}`;
+      
+      topicDiv.innerHTML = `
+        <button class="flex items-center justify-between w-full p-5 text-left transition-colors hover:bg-slate-50" onclick="toggleTopic(${topic.id})">
+          <div class="flex items-center space-x-4">
+            <div class="p-2 bg-slate-100 rounded-lg">
+              <i data-lucide="${topic.icon}" class="w-6 h-6 ${topic.iconColor}"></i>
+            </div>
+            <div>
+              <span class="text-xs font-semibold tracking-wider text-indigo-500 uppercase">${topic.category}</span>
+              <h3 class="text-xl font-bold text-slate-800 mt-1">${topic.title}</h3>
+            </div>
+          </div>
+          <div class="chevron ${isOpen ? 'open' : ''}" id="chevron-${topic.id}">
+            <i data-lucide="chevron-down" class="w-6 h-6 text-slate-400"></i>
+          </div>
+        </button>
+        
+        <div id="content-${topic.id}" class="topic-content overflow-hidden ${isOpen ? 'open' : ''}">
+          <div class="p-6 pt-2 border-t border-slate-100 bg-slate-50/50">
+            <div class="p-5 mb-6 rounded-lg bg-white border border-indigo-100 shadow-sm">
+              <p class="font-semibold text-slate-800 mb-3 flex items-start">
+                <span class="inline-block px-2 py-1 mr-3 text-xs font-bold text-white bg-indigo-500 rounded">提問</span>
+                <span class="mt-0.5">${topic.question}</span>
+              </p>
+              <p class="font-bold text-indigo-700 flex items-start">
+                <span class="inline-block px-2 py-1 mr-3 text-xs font-bold text-white bg-rose-500 rounded">大師解答</span>
+                <span class="mt-0.5">${topic.answer}</span>
+              </p>
+            </div>
+            
+            <div class="mb-6 whitespace-pre-wrap text-slate-700 leading-relaxed px-2 text-justify">
+              ${topic.explanation}
+            </div>
+
+            ${topic.animation ? `
+            <div class="mt-6 px-2">
+              <h4 class="text-sm font-bold text-slate-500 mb-3 tracking-wide">視覺化模型展示</h4>
+              ${topic.animation}
+            </div>` : ''}
+          </div>
+        </div>
+      `;
+      
+      container.appendChild(topicDiv);
+    });
+
+    // 實例化 Lucide 圖示
+    lucide.createIcons();
+
+    // 處理展開與收合的邏輯
+    function toggleTopic(id) {
+      const isCurrentlyOpen = openTopicId === id;
+      
+      // 關閉所有面板
+      document.querySelectorAll('.topic-content').forEach(el => el.classList.remove('open'));
+      document.querySelectorAll('.chevron').forEach(el => el.classList.remove('open'));
+      document.querySelectorAll('.topic-card').forEach(el => el.classList.remove('open'));
+      
+      if (!isCurrentlyOpen) {
+        // 打開被點擊的面板
+        document.getElementById(`content-${id}`).classList.add('open');
+        document.getElementById(`chevron-${id}`).classList.add('open');
+        document.getElementById(`content-${id}`).closest('.topic-card').classList.add('open');
+        openTopicId = id;
+      } else {
+        openTopicId = null;
+      }
+    }
+  </script>
+</body>
+</html>
