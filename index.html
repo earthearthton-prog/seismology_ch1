@@ -1,269 +1,1418 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>地震學大師：十大核心探索</title>
-  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>地震學第一章介紹</title>
+  <meta name="description" content="地震學第一章介紹｜互動式問答、圖解、動畫與地球內部探索" />
+
   <script src="https://cdn.tailwindcss.com"></script>
-  
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    @keyframes rayPath { 0% { stroke-dashoffset: 300; } 100% { stroke-dashoffset: 0; } }
-    .seismic-ray { stroke-dasharray: 300; animation: rayPath 3s infinite linear; }
-    
-    @keyframes beamMove { 0% { stroke-dashoffset: 200; } 100% { stroke-dashoffset: 0; } }
-    .beam { stroke-dasharray: 200; animation: beamMove 2s infinite linear; }
-    
-    @keyframes subduct { 0% { transform: translate(0, 0); } 100% { transform: translate(15px, 15px); } }
-    .subducting-plate { animation: subduct 3s infinite alternate ease-in-out; }
-    
-    @keyframes shearStrain { 0% { transform: skewX(0deg); } 50% { transform: skewX(20deg); } 100% { transform: skewX(0deg); } }
-    .strain-box { animation: shearStrain 3s infinite ease-in-out; transform-origin: bottom; }
-    
-    @keyframes pushForce { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(10px); } }
-    .force-arrow { animation: pushForce 3s infinite ease-in-out; }
+    :root{
+      --bg1:#06121e;
+      --bg2:#0b1f2c;
+      --bg3:#132f3b;
+      --rock:#56453a;
+      --rock2:#7a604c;
+      --magma:#ff7a18;
+      --gold:#f6c453;
+      --sea:#67c7ff;
+      --mint:#66f0c9;
+      --violet:#9f8cff;
+      --red:#ff6b6b;
+      --slate:#dbe7ef;
+      --line:rgba(255,255,255,.12);
+    }
 
-    /* 折疊面板過渡動畫 */
-    .topic-content {
-      transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-      max-height: 0;
-      opacity: 0;
+    html{
+      scroll-behavior:smooth;
     }
-    .topic-content.open {
-      max-height: 1200px;
-      opacity: 1;
+
+    body{
+      background:
+        radial-gradient(circle at 20% 10%, rgba(246,196,83,.08), transparent 18%),
+        radial-gradient(circle at 85% 15%, rgba(103,199,255,.10), transparent 18%),
+        radial-gradient(circle at 50% 90%, rgba(255,122,24,.10), transparent 22%),
+        linear-gradient(180deg, #07131e 0%, #0c1f2b 35%, #102733 70%, #08131d 100%);
+      color:#ecf4fa;
+      overflow-x:hidden;
     }
-    .topic-card.open {
-      box-shadow: 0 0 0 2px #818cf8; /* ring-2 ring-indigo-400 */
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.22), rgba(0,0,0,.6));
+      z-index:0;
     }
-    .chevron {
-      transition: transform 0.3s;
+
+    .glass{
+      background:rgba(11, 23, 33, .72);
+      backdrop-filter: blur(12px);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:
+        0 10px 30px rgba(0,0,0,.28),
+        inset 0 1px 0 rgba(255,255,255,.04);
     }
-    .chevron.open {
-      transform: rotate(180deg);
+
+    .section-card{
+      background: linear-gradient(180deg, rgba(15,29,41,.95), rgba(10,21,31,.94));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: 0 18px 40px rgba(0,0,0,.28);
+    }
+
+    .earth-layer{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)),
+        radial-gradient(circle at 50% 0%, rgba(246,196,83,.12), transparent 30%);
+    }
+
+    .title-glow{
+      text-shadow: 0 0 18px rgba(246,196,83,.15);
+    }
+
+    .chip{
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.05);
+    }
+
+    .topic-content{
+      max-height:0;
+      opacity:0;
+      overflow:hidden;
+      transition:max-height .65s ease, opacity .45s ease;
+    }
+    .topic-content.open{
+      max-height:2600px;
+      opacity:1;
+    }
+    .topic-card.open{
+      border-color:rgba(246,196,83,.45);
+      box-shadow:0 0 0 1px rgba(246,196,83,.18), 0 15px 40px rgba(0,0,0,.28);
+    }
+    .chev{
+      transition:transform .35s ease;
+    }
+    .chev.open{
+      transform:rotate(180deg);
+    }
+
+    .img-frame{
+      background:
+        linear-gradient(135deg, rgba(246,196,83,.10), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .note-box{
+      background:rgba(255,255,255,.03);
+      border-left:4px solid rgba(246,196,83,.7);
+    }
+
+    .formula-box{
+      background:linear-gradient(180deg, rgba(18,35,47,.95), rgba(12,25,34,.96));
+      border:1px solid rgba(103,199,255,.18);
+    }
+
+    .scrollbar-thin::-webkit-scrollbar{width:8px;height:8px}
+    .scrollbar-thin::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:999px}
+    .scrollbar-thin::-webkit-scrollbar-track{background:transparent}
+
+    .float-slow{
+      animation:floatSlow 5s ease-in-out infinite;
+    }
+    @keyframes floatSlow{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-8px)}
+    }
+
+    .pulse-soft{
+      animation:pulseSoft 2.6s ease-in-out infinite;
+    }
+    @keyframes pulseSoft{
+      0%,100%{opacity:.55}
+      50%{opacity:1}
+    }
+
+    .ray-line{
+      stroke-dasharray:280;
+      stroke-dashoffset:280;
+      animation:rayMove 3.4s linear infinite;
+    }
+    @keyframes rayMove{
+      0%{stroke-dashoffset:280}
+      100%{stroke-dashoffset:0}
+    }
+
+    .wave-line{
+      animation:waveFlow 2.2s linear infinite;
+    }
+    @keyframes waveFlow{
+      0%{stroke-dashoffset:120}
+      100%{stroke-dashoffset:0}
+    }
+
+    .plate-shift{
+      animation:plateShift 3.2s ease-in-out infinite alternate;
+    }
+    @keyframes plateShift{
+      from{transform:translateX(0)}
+      to{transform:translateX(12px)}
+    }
+
+    .subduct{
+      animation:subduct 3.2s ease-in-out infinite alternate;
+    }
+    @keyframes subduct{
+      from{transform:translate(0,0)}
+      to{transform:translate(12px,10px)}
+    }
+
+    .shake-soft{
+      animation:shakeSoft 1.6s ease-in-out infinite;
+      transform-origin:center bottom;
+    }
+    @keyframes shakeSoft{
+      0%,100%{transform:translateX(0)}
+      25%{transform:translateX(-2px)}
+      50%{transform:translateX(2px)}
+      75%{transform:translateX(-1px)}
+    }
+
+    .liquefy{
+      animation:liquefy 2.8s ease-in-out infinite;
+    }
+    @keyframes liquefy{
+      0%,100%{transform:translateY(0) scaleX(1)}
+      50%{transform:translateY(3px) scaleX(1.03)}
+    }
+
+    .bar-grow-1{animation:barGrow1 2.2s ease-in-out infinite alternate}
+    .bar-grow-2{animation:barGrow2 2.2s ease-in-out infinite alternate}
+    .bar-grow-3{animation:barGrow3 2.2s ease-in-out infinite alternate}
+    @keyframes barGrow1{from{height:25px}to{height:58px}}
+    @keyframes barGrow2{from{height:38px}to{height:80px}}
+    @keyframes barGrow3{from{height:18px}to{height:66px}}
+
+    .legend-dot{
+      width:.75rem;height:.75rem;border-radius:999px;display:inline-block;margin-right:.4rem
+    }
+
+    .hero-core{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero-core::after{
+      content:"";
+      position:absolute;
+      inset:auto -5% -35% -5%;
+      height:60%;
+      background: radial-gradient(circle at 50% 0%, rgba(255,122,24,.28), transparent 55%);
+      pointer-events:none;
+      filter: blur(18px);
+    }
+
+    .toc-link:hover{
+      background:rgba(255,255,255,.07);
+      transform:translateX(4px);
+    }
+
+    .faq-q{
+      color:#f7d786;
+      font-weight:700;
+    }
+
+    .faq-a{
+      color:#8fe9ff;
+      font-weight:700;
+    }
+
+    .small-kicker{
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      font-size:.72rem;
+      color:#93b8cc;
     }
   </style>
 </head>
-<body class="min-h-screen p-4 font-sans bg-slate-100 text-slate-800 md:p-8">
+<body class="relative min-h-screen font-sans">
+  <div class="relative z-10">
+    <!-- HERO -->
+    <header class="max-w-7xl mx-auto px-4 pt-6 md:px-8 md:pt-8">
+      <div class="glass hero-core rounded-3xl p-6 md:p-10 border border-white/10">
+        <div class="grid grid-cols-1 gap-8 lg:grid-cols-[1.35fr_.85fr] items-center">
+          <div>
+            <div class="small-kicker mb-3">Seismology · Chapter 1 · Interactive Notes</div>
+            <h1 class="title-glow text-4xl md:text-6xl font-black leading-tight tracking-tight">
+              地震學第一章介紹
+            </h1>
+            <p class="mt-5 text-slate-300 text-base md:text-lg leading-8 max-w-3xl">
+              這不是只有「什麼是地震」的入門頁，而是把<strong class="text-amber-300">地震波、地球內部、板塊構造、危害評估、地震預報、核爆監測</strong>串起來的一份互動式章節教材。
+              內容會盡量說得簡單，但不偷掉真正重要的物理觀念。
+            </p>
 
-  <div class="max-w-4xl mx-auto space-y-8">
-    
-    <header class="p-8 text-center bg-white shadow-md rounded-2xl border-t-8 border-indigo-600">
-      <h1 class="mb-4 text-3xl font-extrabold text-slate-800 md:text-5xl">
-        地震學大師：十大核心探索
-      </h1>
-      <p class="text-lg text-slate-600 max-w-2xl mx-auto">
-        從地球深處的物理機制，到保護社會安全的核武監測。跟著大師的腳步，一步步揭開地震學的神秘面紗。
-      </p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <span class="chip rounded-full px-4 py-2 text-sm text-slate-200">深入淺出</span>
+              <span class="chip rounded-full px-4 py-2 text-sm text-slate-200">附圖說明</span>
+              <span class="chip rounded-full px-4 py-2 text-sm text-slate-200">多個 SVG 動畫</span>
+              <span class="chip rounded-full px-4 py-2 text-sm text-slate-200">GitHub Pages 可直接部署</span>
+            </div>
+
+            <div class="mt-8 flex flex-wrap gap-4">
+              <a href="#topics" class="inline-flex items-center gap-2 rounded-full bg-amber-400/90 px-5 py-3 text-slate-950 font-bold shadow-lg hover:bg-amber-300 transition">
+                <i data-lucide="scroll-text" class="w-5 h-5"></i>
+                開始閱讀十大主題
+              </a>
+              <a href="#figures" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-white font-semibold hover:bg-white/10 transition">
+                <i data-lucide="image" class="w-5 h-5"></i>
+                看附圖與圖說
+              </a>
+            </div>
+          </div>
+
+          <div class="glass rounded-3xl p-5 earth-layer">
+            <h2 class="text-lg font-bold mb-4 text-amber-200">地球內部與地震波示意</h2>
+            <div class="flex justify-center">
+              <svg width="320" height="320" viewBox="0 0 320 320" class="max-w-full h-auto">
+                <defs>
+                  <radialGradient id="g1" cx="50%" cy="45%" r="60%">
+                    <stop offset="0%" stop-color="#ffd26b"/>
+                    <stop offset="18%" stop-color="#ffad36"/>
+                    <stop offset="40%" stop-color="#cb5e1f"/>
+                    <stop offset="67%" stop-color="#6a3d2e"/>
+                    <stop offset="100%" stop-color="#3b2c26"/>
+                  </radialGradient>
+                  <filter id="glow1">
+                    <feGaussianBlur stdDeviation="4" result="blur"/>
+                    <feMerge>
+                      <feMergeNode in="blur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+
+                <circle cx="160" cy="160" r="122" fill="url(#g1)" stroke="#bf9b75" stroke-width="2"/>
+                <circle cx="160" cy="160" r="78" fill="rgba(255,160,70,.42)" stroke="rgba(255,255,255,.16)" stroke-width="1.5"/>
+                <circle cx="160" cy="160" r="42" fill="#ffd470" stroke="#fff0b0" stroke-width="1.5" filter="url(#glow1)"/>
+
+                <text x="214" y="112" fill="#f8e0a3" font-size="12">地函 Mantle</text>
+                <text x="203" y="166" fill="#ffd8a5" font-size="12">外核 Outer core</text>
+                <text x="175" y="205" fill="#402a11" font-size="12" font-weight="700">內核 Inner core</text>
+
+                <circle cx="142" cy="47" r="4" fill="#ff6b6b" class="pulse-soft"/>
+                <text x="151" y="45" fill="#fff" font-size="11">震源</text>
+
+                <path d="M142 47 Q 190 95 184 140" fill="none" stroke="#7ed3ff" stroke-width="3" class="ray-line"/>
+                <path d="M142 47 Q 120 105 88 156" fill="none" stroke="#8cffd5" stroke-width="3" class="ray-line" style="animation-delay:1.1s"/>
+                <path d="M142 47 Q 190 120 242 188" fill="none" stroke="#ffb978" stroke-width="3" class="ray-line" style="animation-delay:.6s"/>
+              </svg>
+            </div>
+            <p class="mt-4 text-sm leading-7 text-slate-300">
+              地震學像替地球做斷層掃描。人類沒辦法直接看到數千公里深的地球內部，但可以從<strong class="text-amber-200">地震波怎麼走、何時到、在哪裡消失</strong>，推回地球裡面有什麼層、是固體還是液體。
+            </p>
+          </div>
+        </div>
+      </div>
     </header>
 
-    <div class="flex items-start p-6 bg-blue-50 border-l-4 border-blue-500 rounded-r-xl shadow-sm">
-      <i data-lucide="lightbulb" class="flex-shrink-0 w-6 h-6 mt-1 mr-4 text-blue-600"></i>
-      <div>
-        <h3 class="mb-2 font-bold text-blue-900">學習指南</h3>
-        <p class="text-sm leading-relaxed text-blue-800">
-          這份教材源自頂尖的大學地球科學課程。點擊下方各個主題卡片即可展開閱讀。如果遇到帶有動畫的主題，別忘了觀察圖形的變化，這會幫助你更好地理解抽象的物理模型！
+    <!-- TOC -->
+    <section class="max-w-7xl mx-auto px-4 mt-6 md:px-8">
+      <div class="glass rounded-3xl p-5">
+        <div class="flex items-center gap-3 mb-4">
+          <i data-lucide="map" class="w-5 h-5 text-cyan-300"></i>
+          <h2 class="text-xl font-bold">章節導覽</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 text-sm">
+          <a href="#topics" class="toc-link rounded-2xl px-4 py-3 transition chip">十大探討主題</a>
+          <a href="#hazard-risk" class="toc-link rounded-2xl px-4 py-3 transition chip">Hazard 與 Risk</a>
+          <a href="#attenuation" class="toc-link rounded-2xl px-4 py-3 transition chip">公式(1) 與能量衰減</a>
+          <a href="#materials" class="toc-link rounded-2xl px-4 py-3 transition chip">建材與建築物反應</a>
+          <a href="#liquefaction" class="toc-link rounded-2xl px-4 py-3 transition chip">土壤液化</a>
+          <a href="#forecast-predict" class="toc-link rounded-2xl px-4 py-3 transition chip">預報與預測</a>
+          <a href="#methods" class="toc-link rounded-2xl px-4 py-3 transition chip">地震預測方法</a>
+          <a href="#figures" class="toc-link rounded-2xl px-4 py-3 transition chip">圖 1.1-1 ～ 1.2-19</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEARNING GUIDE -->
+    <section class="max-w-7xl mx-auto px-4 mt-6 md:px-8">
+      <div class="glass rounded-3xl p-6">
+        <div class="flex items-start gap-4">
+          <div class="rounded-2xl bg-cyan-400/10 p-3 shrink-0">
+            <i data-lucide="lightbulb" class="w-6 h-6 text-cyan-300"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-cyan-200">閱讀方式</h2>
+            <p class="mt-2 text-slate-300 leading-8">
+              每一個主題都用「提問 → 解答 → 深入說明 → 小例子／動畫」的方式編排。
+              你可以把它當成：<strong class="text-amber-200">課本內容 + 老師補充 + 視覺化模型</strong> 的整合版。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEN TOPICS -->
+    <section id="topics" class="max-w-7xl mx-auto px-4 mt-8 md:px-8">
+      <div class="mb-6">
+        <div class="small-kicker">Chapter Core Topics</div>
+        <h2 class="text-3xl md:text-4xl font-black mt-2">十大探討主題</h2>
+        <p class="mt-3 text-slate-300 leading-8 max-w-4xl">
+          這一區把第一章真正核心的觀念整理成 10 個互動式主題，從地震學的定義，一路連到危害、預測與核爆監測。
         </p>
       </div>
-    </div>
 
-    <div id="topics-container" class="space-y-4">
+      <div id="topics-container" class="space-y-4"></div>
+    </section>
+
+    <!-- HAZARD VS RISK -->
+    <section id="hazard-risk" class="max-w-7xl mx-auto px-4 mt-10 md:px-8">
+      <div class="section-card rounded-3xl p-6 md:p-8">
+        <div class="flex items-center gap-3 mb-4">
+          <i data-lucide="shield-alert" class="w-6 h-6 text-amber-300"></i>
+          <h2 class="text-2xl md:text-3xl font-black">3. Seismic Hazard 與 Seismic Risk 的區別</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <div class="glass rounded-3xl p-6">
+            <h3 class="text-xl font-bold text-cyan-200 mb-3">Hazard = 危害度</h3>
+            <p class="text-slate-300 leading-8">
+              指的是<strong class="text-amber-200">地震現象本身有多強</strong>，例如某地未來 50 年可能遭遇多大的地表加速度、震度、斷層位移或海嘯高度。
+              它重點在「自然過程有多危險」。
+            </p>
+            <div class="mt-4 note-box rounded-2xl p-4 text-slate-200 text-sm leading-7">
+              例子：同樣是 0.4g 的地面加速度，發生在沙漠無人區與發生在人口稠密城市，<strong>Hazard 可以一樣高</strong>。
+            </div>
+          </div>
+
+          <div class="glass rounded-3xl p-6">
+            <h3 class="text-xl font-bold text-rose-200 mb-3">Risk = 風險</h3>
+            <p class="text-slate-300 leading-8">
+              指的是<strong class="text-amber-200">實際可能造成多少損失</strong>，包含人口暴露量、建築物抗震能力、基礎設施脆弱度、經濟活動密度與防災能力。
+              它重點在「這場地震會害多少人受影響」。
+            </p>
+            <div class="mt-4 note-box rounded-2xl p-4 text-slate-200 text-sm leading-7">
+              例子：同樣規模的地震，若一個地區建築多為老舊磚造、人口密集且消防與醫療不足，<strong>Risk 就會遠高於</strong>另一個耐震設計完善的城市。
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="glass rounded-2xl p-5">
+            <div class="text-sm text-slate-400">一句話記</div>
+            <div class="mt-2 font-bold text-lg text-amber-200">Hazard 問：地震有多強？</div>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <div class="text-sm text-slate-400">一句話記</div>
+            <div class="mt-2 font-bold text-lg text-cyan-200">Exposure 問：有多少東西會被打到？</div>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <div class="text-sm text-slate-400">一句話記</div>
+            <div class="mt-2 font-bold text-lg text-rose-200">Risk 問：最後會造成多大損失？</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ATTENUATION -->
+    <section id="attenuation" class="max-w-7xl mx-auto px-4 mt-10 md:px-8">
+      <div class="section-card rounded-3xl p-6 md:p-8">
+        <div class="flex items-center gap-3 mb-4">
+          <i data-lucide="trending-down" class="w-6 h-6 text-cyan-300"></i>
+          <h2 class="text-2xl md:text-3xl font-black">4. 公式 (1)：地震波傳遞中能量衰減的原因</h2>
+        </div>
+
+        <div class="formula-box rounded-3xl p-6 mt-6">
+          <p class="text-slate-300 text-sm md:text-base leading-8">
+            題目給的形式：
+          </p>
+          <div class="mt-3 text-center text-xl md:text-3xl font-black text-amber-200 tracking-wide">
+            a(M,r) = b · 10<sup>cM</sup> · r<sup>-d</sup>
+          </div>
+          <p class="mt-4 text-slate-300 leading-8">
+            這裡的意思是：某個地點觀測到的地面加速度 <strong class="text-cyan-200">a</strong>，會隨震級 <strong class="text-cyan-200">M</strong> 增大而變強，
+            但會隨震源距離 <strong class="text-cyan-200">r</strong> 增加而衰減。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-[1.05fr_.95fr] gap-6 mt-8">
+          <div class="space-y-4">
+            <div class="glass rounded-2xl p-5">
+              <h3 class="font-bold text-lg text-amber-200">先釐清：衰減不是波速變慢</h3>
+              <p class="mt-2 text-slate-300 leading-8">
+                地震學說的 attenuation，主要是<strong>振幅或能量變小</strong>，不是指波跑得越來越慢。
+                波速主要由介質的彈性與密度決定；衰減則是指傳到遠方時，訊號變得比較弱。
+              </p>
+            </div>
+
+            <div class="glass rounded-2xl p-5">
+              <h3 class="font-bold text-lg text-cyan-200">造成衰減的三個主要原因</h3>
+              <ol class="mt-3 space-y-3 text-slate-300 leading-8 list-decimal list-inside">
+                <li><strong class="text-white">幾何擴散（Geometrical spreading）</strong>：波前像水波一樣往外擴散，能量分散到越來越大的面積，所以單位面積分到的能量變少。</li>
+                <li><strong class="text-white">介質吸收（Intrinsic attenuation）</strong>：岩石不是完美彈性體，波通過時會有部分機械能轉成熱能。</li>
+                <li><strong class="text-white">散射（Scattering）</strong>：地殼裡不均質很多，像斷層、裂隙、不同岩性界面都會讓波能被打散到不同方向。</li>
+              </ol>
+            </div>
+
+            <div class="glass rounded-2xl p-5">
+              <h3 class="font-bold text-lg text-rose-200">從公式怎麼看？</h3>
+              <p class="mt-2 text-slate-300 leading-8">
+                式中的 <strong class="text-amber-200">10<sup>cM</sup></strong> 表示震級越大，源頭釋放的能量越大；
+                <strong class="text-amber-200">r<sup>-d</sup></strong> 則表示距離越遠，地表加速度會按一定比例下降。
+                這個距離衰減項，實際上就把「幾何擴散 + 吸收 + 散射」的綜合效果濃縮進去。
+              </p>
+            </div>
+          </div>
+
+          <div class="glass rounded-3xl p-5">
+            <h3 class="text-lg font-bold text-amber-200 mb-4">衰減視覺化</h3>
+            <div class="flex justify-center">
+              <svg width="360" height="250" viewBox="0 0 360 250" class="max-w-full h-auto">
+                <defs>
+                  <filter id="glow2">
+                    <feGaussianBlur stdDeviation="3" result="b"/>
+                    <feMerge>
+                      <feMergeNode in="b"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+
+                <rect x="18" y="20" width="324" height="190" rx="18" fill="#0d1c29" stroke="rgba(255,255,255,.12)"/>
+                <line x1="45" y1="185" x2="320" y2="185" stroke="white" stroke-width="2"/>
+                <line x1="45" y1="35" x2="45" y2="185" stroke="white" stroke-width="2"/>
+
+                <text x="145" y="220" fill="#dbe7ef" font-size="12">距離 r 增加</text>
+                <text x="18" y="110" fill="#dbe7ef" font-size="12" transform="rotate(-90 18 110)">振幅 a 減小</text>
+
+                <circle cx="64" cy="74" r="6" fill="#ff7a18" class="pulse-soft" filter="url(#glow2)"/>
+                <text x="50" y="60" fill="#ffd79b" font-size="12">震源</text>
+
+                <path d="M64 78 C110 100, 150 118, 200 138 S 275 160, 315 173"
+                      fill="none" stroke="#7ed3ff" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="120" cy="104" r="4" fill="#7ed3ff"/>
+                <circle cx="184" cy="132" r="3.5" fill="#7ed3ff"/>
+                <circle cx="252" cy="154" r="2.8" fill="#7ed3ff"/>
+                <circle cx="304" cy="170" r="2.4" fill="#7ed3ff"/>
+
+                <circle cx="64" cy="78" r="18" fill="none" stroke="rgba(255,179,120,.35)" stroke-width="2"/>
+                <circle cx="64" cy="78" r="44" fill="none" stroke="rgba(255,179,120,.22)" stroke-width="2"/>
+                <circle cx="64" cy="78" r="74" fill="none" stroke="rgba(255,179,120,.14)" stroke-width="2"/>
+              </svg>
+            </div>
+            <p class="mt-4 text-sm text-slate-300 leading-7">
+              近震區的波通常強、清楚；到了遠震區，訊號會因能量擴散、介質吸收、散射而逐漸減弱。
+              所以「遠」不只是比較晚到，也常常是比較不明顯。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MATERIALS -->
+    <section id="materials" class="max-w-7xl mx-auto px-4 mt-10 md:px-8">
+      <div class="section-card rounded-3xl p-6 md:p-8">
+        <div class="flex items-center gap-3 mb-4">
+          <i data-lucide="building-2" class="w-6 h-6 text-amber-300"></i>
+          <h2 class="text-2xl md:text-3xl font-black">6. 不同建材的抗震能力？不同高度建築為何反應不同？</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <div class="glass rounded-3xl p-6">
+            <h3 class="text-xl font-bold text-cyan-200 mb-3">不同建材的抗震表現</h3>
+            <ul class="space-y-3 text-slate-300 leading-8">
+              <li><strong class="text-white">鋼筋混凝土：</strong> 強度高，若有良好耐震設計，能同時兼顧承載力與延性，表現通常最好。</li>
+              <li><strong class="text-white">鋼構：</strong> 延性很強，能在不立刻脆斷的情況下耗散能量，但節點設計非常關鍵。</li>
+              <li><strong class="text-white">木造框架：</strong> 重量較輕，慣性力較小，因此在中小地震中往往表現不差。</li>
+              <li><strong class="text-white">磚造／土坯／弱砌體：</strong> 抗壓尚可，但抗拉與抗剪弱，遇到橫向搖晃容易脆性破壞。</li>
+            </ul>
+
+            <div class="mt-5 note-box rounded-2xl p-4 text-sm leading-7 text-slate-200">
+              最重要的不只是「材料名字」，而是整體結構是否有<strong>延性、連續性、良好節點、耐震設計與施工品質</strong>。
+            </div>
+          </div>
+
+          <div class="glass rounded-3xl p-6">
+            <h3 class="text-xl font-bold text-amber-200 mb-4">建築高度與共振</h3>
+            <p class="text-slate-300 leading-8">
+              地震波不是只有一種頻率。建築物本身也有自己的<strong class="text-cyan-200">自然週期</strong>。
+              當地震主要週期與建築自然週期接近時，就會出現<strong class="text-rose-200">共振</strong>，搖得特別大。
+            </p>
+            <ul class="mt-4 space-y-2 text-slate-300 leading-8">
+              <li><strong class="text-white">低樓層建築</strong>：自然週期短，較容易受高頻震動影響。</li>
+              <li><strong class="text-white">高樓建築</strong>：自然週期長，較容易受長週期地震波影響。</li>
+              <li><strong class="text-white">軟弱盆地</strong>：常放大長週期震動，因此都會區高樓特別需要注意。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mt-8 glass rounded-3xl p-6">
+          <h3 class="text-lg font-bold text-amber-200 mb-4">建築高度反應動畫</h3>
+          <div class="flex justify-center overflow-x-auto scrollbar-thin">
+            <svg width="760" height="260" viewBox="0 0 760 260" class="min-w-[760px]">
+              <rect x="0" y="0" width="760" height="260" rx="22" fill="#0d1b28" stroke="rgba(255,255,255,.1)"/>
+              <line x1="40" y1="210" x2="720" y2="210" stroke="#c7d5df" stroke-width="3"/>
+
+              <g class="shake-soft">
+                <rect x="100" y="145" width="48" height="65" rx="4" fill="#71d4ff"/>
+                <rect x="108" y="155" width="10" height="10" fill="#0d1b28"/>
+                <rect x="130" y="155" width="10" height="10" fill="#0d1b28"/>
+                <text x="76" y="232" fill="#dce8ef" font-size="12">低樓層：短週期</text>
+              </g>
+
+              <g transform="translate(275,0)">
+                <g class="float-slow">
+                  <rect x="0" y="102" width="62" height="108" rx="5" fill="#f3c766"/>
+                  <rect x="10" y="114" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="40" y="114" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="10" y="136" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="40" y="136" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="10" y="158" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="40" y="158" width="12" height="12" fill="#0d1b28"/>
+                </g>
+                <text x="-28" y="232" fill="#dce8ef" font-size="12">中樓層：中等週期</text>
+              </g>
+
+              <g transform="translate(505,0)">
+                <g class="float-slow" style="animation-duration:4.2s">
+                  <rect x="0" y="48" width="76" height="162" rx="6" fill="#ff8b79"/>
+                  <rect x="12" y="62" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="52" y="62" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="12" y="88" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="52" y="88" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="12" y="114" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="52" y="114" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="12" y="140" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="52" y="140" width="12" height="12" fill="#0d1b28"/>
+                </g>
+                <text x="-18" y="232" fill="#dce8ef" font-size="12">高樓：長週期更敏感</text>
+              </g>
+
+              <path d="M40 210 C70 188, 100 232, 130 210 S190 188, 220 210 S280 232, 310 210 S370 188, 400 210 S460 232, 490 210 S550 188, 580 210 S640 232, 720 210"
+                    fill="none" stroke="#8fe9ff" stroke-width="4" stroke-dasharray="14 10" class="wave-line"/>
+              <text x="538" y="30" fill="#8fe9ff" font-size="13">地震波週期不同，建築反應也不同</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIQUEFACTION -->
+    <section id="liquefaction" class="max-w-7xl mx-auto px-4 mt-10 md:px-8">
+      <div class="section-card rounded-3xl p-6 md:p-8">
+        <div class="flex items-center gap-3 mb-4">
+          <i data-lucide="droplets" class="w-6 h-6 text-cyan-300"></i>
+          <h2 class="text-2xl md:text-3xl font-black">7. 土壤液化的原因</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-[1.05fr_.95fr] gap-6 mt-6">
+          <div class="glass rounded-3xl p-6">
+            <p class="text-slate-300 leading-8">
+              土壤液化最常發生在<strong class="text-amber-200">鬆散、含水高、顆粒細、地下水位淺</strong>的砂土層。
+              地震來時，土粒受到反覆震動，原本彼此接觸支撐的骨架被打亂，孔隙水壓快速升高。
+              當孔隙水壓高到幾乎撐住全部土粒重量時，土粒之間的有效應力就大幅下降，土壤會暫時像液體一樣失去承載力。
+            </p>
+
+            <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="chip rounded-2xl p-4">
+                <h3 class="font-bold text-white">條件 1</h3>
+                <p class="mt-2 text-sm text-slate-300">土層鬆散，顆粒排列不穩定</p>
+              </div>
+              <div class="chip rounded-2xl p-4">
+                <h3 class="font-bold text-white">條件 2</h3>
+                <p class="mt-2 text-sm text-slate-300">含水飽和，孔隙水多</p>
+              </div>
+              <div class="chip rounded-2xl p-4">
+                <h3 class="font-bold text-white">條件 3</h3>
+                <p class="mt-2 text-sm text-slate-300">受到足夠強且持續的震動</p>
+              </div>
+            </div>
+
+            <div class="mt-5 note-box rounded-2xl p-4 text-sm text-slate-200 leading-7">
+              常見現象包括：地面冒砂噴水、路面起伏、建築下陷、傾斜、地下管線上浮或破裂。
+            </div>
+          </div>
+
+          <div class="glass rounded-3xl p-6">
+            <h3 class="text-lg font-bold text-amber-200 mb-4">液化示意動畫</h3>
+            <div class="flex justify-center">
+              <svg width="360" height="280" viewBox="0 0 360 280" class="max-w-full h-auto">
+                <rect x="12" y="18" width="336" height="244" rx="20" fill="#0d1b28" stroke="rgba(255,255,255,.12)"/>
+
+                <rect x="40" y="40" width="280" height="60" fill="#6d5848"/>
+                <text x="52" y="73" fill="#f2d6b0" font-size="13">地表與建築基礎</text>
+
+                <g class="shake-soft">
+                  <rect x="132" y="5" width="54" height="95" rx="4" fill="#8fe9ff"/>
+                  <rect x="142" y="18" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="164" y="18" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="142" y="40" width="12" height="12" fill="#0d1b28"/>
+                  <rect x="164" y="40" width="12" height="12" fill="#0d1b28"/>
+                </g>
+
+                <g class="liquefy">
+                  <rect x="40" y="100" width="280" height="120" fill="#d3b177"/>
+                  <g fill="#8c6c41">
+                    <circle cx="72" cy="136" r="9"/>
+                    <circle cx="108" cy="122" r="10"/>
+                    <circle cx="144" cy="139" r="8"/>
+                    <circle cx="185" cy="130" r="11"/>
+                    <circle cx="220" cy="143" r="9"/>
+                    <circle cx="262" cy="124" r="10"/>
+                    <circle cx="292" cy="140" r="8"/>
+                    <circle cx="92" cy="174" r="9"/>
+                    <circle cx="128" cy="165" r="10"/>
+                    <circle cx="168" cy="182" r="8"/>
+                    <circle cx="210" cy="170" r="10"/>
+                    <circle cx="248" cy="182" r="9"/>
+                    <circle cx="286" cy="168" r="11"/>
+                  </g>
+                  <g fill="rgba(126,211,255,.75)">
+                    <circle cx="82" cy="150" r="5"/>
+                    <circle cx="155" cy="121" r="4"/>
+                    <circle cx="232" cy="131" r="5"/>
+                    <circle cx="102" cy="188" r="4"/>
+                    <circle cx="195" cy="156" r="5"/>
+                    <circle cx="278" cy="189" r="4"/>
+                  </g>
+                </g>
+
+                <path d="M55 232 C85 212, 120 252, 160 232 S225 212, 260 232 S300 252, 320 232"
+                      fill="none" stroke="#ffbf7d" stroke-width="4" stroke-dasharray="14 10" class="wave-line"/>
+                <text x="52" y="252" fill="#ffd59d" font-size="12">反覆震動 → 孔隙水壓升高 → 有效應力下降</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORECAST VS PREDICTION -->
+    <section id="forecast-predict" class="max-w-7xl mx-auto px-4 mt-10 md:px-8">
+      <div class="section-card rounded-3xl p-6 md:p-8">
+        <div class="flex items-center gap-3 mb-4">
+          <i data-lucide="radar" class="w-6 h-6 text-amber-300"></i>
+          <h2 class="text-2xl md:text-3xl font-black">8. 什麼是地震預報？與地震預測有何不同？</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <div class="glass rounded-3xl p-6">
+            <h3 class="text-xl font-bold text-cyan-200">地震預報（Forecast）</h3>
+            <p class="mt-3 text-slate-300 leading-8">
+              指的是用<strong>機率</strong>描述未來某段時間、某區域內發生某種規模地震的可能性。
+              它比較像氣候統計，不是精準指出某一天某一刻。
+            </p>
+            <div class="mt-4 note-box rounded-2xl p-4 text-sm leading-7 text-slate-200">
+              例子：未來 30 年，某斷層附近發生 M7 以上地震的機率為 35%。
+            </div>
+          </div>
+
+          <div class="glass rounded-3xl p-6">
+            <h3 class="text-xl font-bold text-rose-200">地震預測（Prediction）</h3>
+            <p class="mt-3 text-slate-300 leading-8">
+              指的是想要指出<strong>明確時間、地點、規模</strong>，例如「下週某地將發生 M6.5 地震」。
+              這是非常困難的，因為震源破裂前的地下狀態難以完整觀測，而且前兆不穩定。
+            </p>
+            <div class="mt-4 note-box rounded-2xl p-4 text-sm leading-7 text-slate-200">
+              地震學界目前較有把握的是「長期機率預報」，而不是「短期精準預測」。
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 glass rounded-3xl p-6">
+          <h3 class="font-bold text-lg text-amber-200 mb-4">為什麼圖 1.2-14 重要？</h3>
+          <p class="text-slate-300 leading-8">
+            圖 1.2-14 的重點不是只有哪張地圖比較紅，而是它在告訴你：
+            <strong class="text-cyan-200">只要改變幾個模型假設，危害圖就可能差很多</strong>。
+            這代表在資料不足的區域，像是板塊內部地震區，危害評估本身就帶有很大的不確定性。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- METHODS -->
+    <section id="methods" class="max-w-7xl mx-auto px-4 mt-10 md:px-8">
+      <div class="section-card rounded-3xl p-6 md:p-8">
+        <div class="flex items-center gap-3 mb-4">
+          <i data-lucide="search-code" class="w-6 h-6 text-cyan-300"></i>
+          <h2 class="text-2xl md:text-3xl font-black">10. 地震預測的方法有哪些？</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mt-6">
+          <div class="glass rounded-3xl p-5">
+            <h3 class="font-bold text-lg text-amber-200">歷史地震週期法</h3>
+            <p class="mt-2 text-slate-300 leading-8">
+              研究某斷層過去是否有重複破裂間隔，例如平均幾十年或幾百年一次。
+              問題是實際地震不一定準時出現。
+            </p>
+          </div>
+          <div class="glass rounded-3xl p-5">
+            <h3 class="font-bold text-lg text-cyan-200">地殼變形監測</h3>
+            <p class="mt-2 text-slate-300 leading-8">
+              利用 GPS、InSAR 看地表是否持續累積應變，判斷斷層是否在鎖定並儲能。
+            </p>
+          </div>
+          <div class="glass rounded-3xl p-5">
+            <h3 class="font-bold text-lg text-rose-200">前震與群震分析</h3>
+            <p class="mt-2 text-slate-300 leading-8">
+              有些大地震前會有前震，但不是每次都有，而且很多小地震最後也不會變成大地震。
+            </p>
+          </div>
+          <div class="glass rounded-3xl p-5">
+            <h3 class="font-bold text-lg text-amber-200">地下水、氣體、電磁異常</h3>
+            <p class="mt-2 text-slate-300 leading-8">
+              曾被提出當作可能前兆，但穩定性與可重複驗證性普遍不足，爭議較大。
+            </p>
+          </div>
+          <div class="glass rounded-3xl p-5">
+            <h3 class="font-bold text-lg text-cyan-200">統計機率模型</h3>
+            <p class="mt-2 text-slate-300 leading-8">
+              像 ETAS、時間依賴模型、斷層滑移率模型，重點是估算某區未來發震機率。
+            </p>
+          </div>
+          <div class="glass rounded-3xl p-5">
+            <h3 class="font-bold text-lg text-rose-200">機器學習輔助</h3>
+            <p class="mt-2 text-slate-300 leading-8">
+              可用於大量地震目錄、波形與異常訊號分析，但目前仍主要是輔助研究，並非可靠的精準預測工具。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FIGURES -->
+    <section id="figures" class="max-w-7xl mx-auto px-4 mt-10 mb-14 md:px-8">
+      <div class="mb-6">
+        <div class="small-kicker">Figures & Explanations</div>
+        <h2 class="text-3xl md:text-4xl font-black mt-2">附圖與圖說整理</h2>
+        <p class="mt-3 text-slate-300 leading-8 max-w-4xl">
+          以下把你指定的圖全部放進網頁，並且各自搭配簡單但有深度的說明，方便直接當教材使用。
+        </p>
       </div>
 
-    <div class="p-8 text-center text-white shadow-lg bg-slate-800 rounded-2xl">
-      <h3 class="mb-4 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">大師的終極思考題</h3>
-      <p class="mb-6 leading-relaxed text-slate-300 max-w-2xl mx-auto">
-        在「主題 9」中我們學到，天然地震與核爆所產生的波形特徵（體波與面波的比例）截然不同。
-        <br/><br/>
-        既然如此，你覺得在未來，我們能不能訓練<strong>人工智慧（AI）</strong>直接讀取地震儀的數據，並在一秒內自動發出「這是大地震，還是某國的秘密核試爆」的警報呢？AI 在這裡可能會遇到什麼挑戰？
-      </p>
-    </div>
+      <div class="space-y-8">
+        <!-- figure template repeats -->
+        <section class="section-card rounded-3xl p-6 md:p-8">
+          <h3 class="text-2xl font-black text-amber-200 mb-5">圖 1.1-1 地震實驗的幾何架構示意圖</h3>
+          <div class="img-frame rounded-3xl p-4">
+            <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.1-1.png" alt="圖1.1-1 地震實驗的幾何架構示意圖" class="w-full rounded-2xl shadow-2xl" />
+          </div>
+          <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-300">
+            <div class="glass rounded-2xl p-4"><strong class="text-white">震源 Source</strong><br>地震波產生的起點，可以是天然地震，也可以是人工爆炸。圖中的 source pulse 與 origin time 是整個事件的開始。</div>
+            <div class="glass rounded-2xl p-4"><strong class="text-white">介質 Medium</strong><br>波通過的地球材料，像地殼、地函或地下地層。不同介質會改變波速、路徑與振幅。</div>
+            <div class="glass rounded-2xl p-4"><strong class="text-white">接收器 Receiver</strong><br>也就是地震儀。它不是「看見地球」，而是記錄地面微小運動，再由科學家反推地下結構。</div>
+          </div>
+        </section>
 
+        <section class="section-card rounded-3xl p-6 md:p-8">
+          <h3 class="text-2xl font-black text-cyan-200 mb-5">圖 1.1-2 地球內部的地震射線路徑</h3>
+          <div class="img-frame rounded-3xl p-4">
+            <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.1-2.png" alt="圖1.1-2 地球內部的地震射線路徑" class="w-full rounded-2xl shadow-2xl" />
+          </div>
+          <div class="mt-5 space-y-3 text-slate-300 leading-8">
+            <p><strong class="text-white">折射效應：</strong> 地震波速度通常會隨深度增加而增加，所以射線不會走直線，而會逐漸彎曲。</p>
+            <p><strong class="text-white">Turning point：</strong> 射線在最深點轉折向上，最後回到地表被遠方測站接收到。</p>
+            <p><strong class="text-white">科學意義：</strong> 如果不同測站都接到不同深度轉折的波，科學家就能像醫學斷層掃描一樣，重建地球內部的速度結構。</p>
+          </div>
+        </section>
+
+        <section class="section-card rounded-3xl p-6 md:p-8">
+          <h3 class="text-2xl font-black text-violet-200 mb-5">圖 1.1-3 哥倫比亞地震的地震圖與射線路徑</h3>
+          <div class="img-frame rounded-3xl p-4">
+            <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.1-3.png" alt="圖1.1-3 哥倫比亞地震的地震圖與射線路徑" class="w-full rounded-2xl shadow-2xl" />
+          </div>
+          <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-300">
+            <div class="glass rounded-2xl p-4">
+              <h4 class="font-bold text-white mb-2">體波</h4>
+              <p>P 波最早抵達；pP 波先向上、於地表反射後再回到測站；PP 波則是往下傳播並在地表反射一次。P 與 pP 的時間差是判斷震源深度的重要工具。</p>
+            </div>
+            <div class="glass rounded-2xl p-4">
+              <h4 class="font-bold text-white mb-2">表面波</h4>
+              <p>Rayleigh 波沿地表傳播，振幅常很大，對建築破壞特別重要。它告訴我們：最慢到的不一定最不重要。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card rounded-3xl p-6 md:p-8">
+          <h3 class="text-2xl font-black text-rose-200 mb-5">圖 1.1-4 東加深震的多次核幔邊界反射</h3>
+          <div class="img-frame rounded-3xl p-4">
+            <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.1-4.png" alt="圖1.1-4 東加深震的多次核幔邊界反射" class="w-full rounded-2xl shadow-2xl" />
+          </div>
+          <div class="mt-5 text-slate-300 leading-8">
+            <p><strong class="text-white">ScS 震相：</strong> S 波向下傳播後在核幔邊界反射再回到地表，圖中若看到 ScS₂、ScS₃ 等，表示波在地球深部發生多次來回反射。</p>
+            <p class="mt-2">這種現象很重要，因為它反映了<strong class="text-amber-200">核幔邊界是強烈的不連續面</strong>，而且液態外核與固態地函的物性差異非常大。</p>
+          </div>
+        </section>
+
+        <section class="section-card rounded-3xl p-6 md:p-8">
+          <h3 class="text-2xl font-black text-amber-200 mb-5">圖 1.1-5 地震學在石油與天然氣探勘的應用</h3>
+          <div class="img-frame rounded-3xl p-4">
+            <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.1-5.png" alt="圖1.1-5 地震學在石油與天然氣探勘中的應用" class="w-full rounded-2xl shadow-2xl" />
+          </div>
+          <div class="mt-5 space-y-3 text-slate-300 leading-8">
+            <p><strong class="text-white">人工震源：</strong> 在地表製造可控制的地震波。</p>
+            <p><strong class="text-white">反射成像：</strong> 波遇到不同岩層界面，例如砂岩、頁岩、石灰岩，就會反射回來。</p>
+            <p><strong class="text-white">深度剖面：</strong> 把大量地震圖整理後，可以把「時間剖面」轉換成「深度剖面」，形成地下構造影像。</p>
+            <p><strong class="text-white">應用核心：</strong> 這其實就是把地震學從研究天然地震，延伸成研究地下資源與地層幾何的工具。</p>
+          </div>
+        </section>
+
+        <section class="section-card rounded-3xl p-6 md:p-8">
+          <h3 class="text-2xl font-black text-slate-100 mb-5">圖 1.2-3 美國地震危害預測地圖</h3>
+          <div class="img-frame rounded-3xl p-4">
+            <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.2-3.png" alt="圖1.2-3 美國地震危害預測地圖" class="w-full rounded-2xl shadow-2xl" />
+          </div>
+          <div class="mt-5 space-y-3 text-slate-300 leading-8">
+            <p><strong class="text-white">預測指標：</strong> 顯示未來 50 年內有 2% 機率超過的最大地面加速度 PGA。</p>
+            <p><strong class="text-white">單位：</strong> 用 g 的百分比表示，例如 20%g、40%g。</p>
+            <p><strong class="text-white">區域差異：</strong> 不只美西板塊邊界危險，美國中部與東部某些地區也不能忽視。</p>
+            <p><strong class="text-white">社會應用：</strong> 建築法規、保險費率、公共建設設計都會參考這類地圖。</p>
+          </div>
+        </section>
+
+        <section class="section-card rounded-3xl p-6 md:p-8">
+          <h3 class="text-2xl font-black text-orange-200 mb-5">圖 1.2-5 不同地區的地震波衰減差異</h3>
+          <div class="img-frame rounded-3xl p-4">
+            <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.2-5.png" alt="圖1.2-5 不同地區的地震波衰減差異" class="w-full rounded-2xl shadow-2xl" />
+          </div>
+          <div class="mt-5 space-y-3 text-slate-300 leading-8">
+            <p><strong class="text-white">傳導效率差異：</strong> 穩定大陸地殼常能更有效率地傳遞波能。</p>
+            <p><strong class="text-white">影響範圍：</strong> 相同震級下，美東震動可傳得比美西更遠。</p>
+            <p><strong class="text-white">重要概念：</strong> 同樣的規模，不同地質背景下的「有感範圍」可能差很多，所以不能只看震級數字。</p>
+          </div>
+        </section>
+
+        <section class="section-card rounded-3xl p-6 md:p-8">
+          <h3 class="text-2xl font-black text-cyan-200 mb-5">圖 1.2-6 不同建築材料在不同震度下的破壞比例</h3>
+          <div class="img-frame rounded-3xl p-4">
+            <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.2-6.png" alt="圖1.2-6 不同建築材料在不同震度下的破壞比例" class="w-full rounded-2xl shadow-2xl" />
+          </div>
+          <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-300">
+            <div class="glass rounded-2xl p-4">
+              <h4 class="font-bold text-white mb-2">核心理念</h4>
+              <p>真正造成大量傷亡的，往往不是地震波本身，而是脆弱建築倒塌。</p>
+            </div>
+            <div class="glass rounded-2xl p-4">
+              <h4 class="font-bold text-white mb-2">材料比較</h4>
+              <p>鋼筋混凝土與經耐震設計的結構通常表現最好；磚牆與弱砌體最脆弱。</p>
+            </div>
+            <div class="glass rounded-2xl p-4">
+              <h4 class="font-bold text-white mb-2">防災意義</h4>
+              <p>Risk 的高低，常取決於建築品質，而不只是地震規模。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card rounded-3xl p-6 md:p-8">
+          <h3 class="text-2xl font-black text-amber-200 mb-5">圖 1.2-14 地震預報與模型假設的不確定性</h3>
+          <div class="img-frame rounded-3xl p-4">
+            <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.2-14.png" alt="圖1.2-14 地震預報與模型假設的不確定性" class="w-full rounded-2xl shadow-2xl" />
+          </div>
+          <div class="mt-5 text-slate-300 leading-8">
+            <p>這張圖的關鍵是：<strong class="text-white">不同震級上限假設、不同地面運動模型，會讓 PGA 預測圖差很多</strong>。</p>
+            <p class="mt-2">這表示在地震紀錄稀少的區域，危害評估常帶有顯著不確定性。也因此，地震預報通常說的是<strong class="text-cyan-200">機率與範圍</strong>，不是精準「命中時間」。</p>
+          </div>
+        </section>
+
+        <section class="section-card rounded-3xl p-6 md:p-8">
+          <h3 class="text-2xl font-black text-rose-200 mb-5">圖 1.2-15、1.2-16 什麼是 Seismic Gap？</h3>
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <div>
+              <div class="img-frame rounded-3xl p-4">
+                <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.2-15.png" alt="圖1.2-15 Seismic Gap" class="w-full rounded-2xl shadow-2xl" />
+              </div>
+            </div>
+            <div>
+              <div class="img-frame rounded-3xl p-4">
+                <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.2-16.png" alt="圖1.2-16 Seismic Gap" class="w-full rounded-2xl shadow-2xl" />
+              </div>
+            </div>
+          </div>
+          <div class="mt-5 space-y-3 text-slate-300 leading-8">
+            <p><strong class="text-white">Seismic gap</strong> 指的是在一長串活躍斷層或隱沒帶中，某一段相對安靜、很久沒有大地震的區域。</p>
+            <p>這個概念背後的想法是：如果周圍區段都釋放過應變，唯獨某段沉默，那這段可能仍在累積應變，未來可能成為下一次大地震候選區。</p>
+            <p>但要注意：<strong class="text-amber-200">Seismic gap 不是保證會發震，也不是精準預測工具</strong>。它比較像是一種危險區段辨識概念。</p>
+          </div>
+        </section>
+
+        <section class="section-card rounded-3xl p-6 md:p-8">
+          <h3 class="text-2xl font-black text-cyan-200 mb-5">圖 1.2-18、1.2-19 如何用地震學監測核子試爆？</h3>
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <div>
+              <div class="img-frame rounded-3xl p-4">
+                <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.2-18.png" alt="圖1.2-18 核爆監測" class="w-full rounded-2xl shadow-2xl" />
+              </div>
+            </div>
+            <div>
+              <div class="img-frame rounded-3xl p-4">
+                <img src="https://raw.githubusercontent.com/earthearthton-prog/seismology_ch1/main/1.2-19.png" alt="圖1.2-19 地震與爆炸區分" class="w-full rounded-2xl shadow-2xl" />
+              </div>
+            </div>
+          </div>
+          <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-300">
+            <div class="glass rounded-2xl p-4">
+              <h4 class="font-bold text-white mb-2">監測方式</h4>
+              <p>國際監測系統 IMS 利用地震波、水聲、次聲波與放射性核種監測，偵測可疑爆炸事件。</p>
+            </div>
+            <div class="glass rounded-2xl p-4">
+              <h4 class="font-bold text-white mb-2">如何與天然地震區分？</h4>
+              <p>地下核爆通常會產生較強的 P 波、較弱的表面波，所以在 mb–Ms 圖上常與天然地震分群。也會結合波形型態、深度、位置與多站資料交叉判斷。</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- FINAL THINKING -->
+    <section class="max-w-7xl mx-auto px-4 pb-16 md:px-8">
+      <div class="glass rounded-3xl p-6 md:p-8">
+        <div class="flex items-center gap-3">
+          <i data-lucide="brain-circuit" class="w-6 h-6 text-amber-300"></i>
+          <h2 class="text-2xl font-black">延伸思考</h2>
+        </div>
+        <p class="mt-4 text-slate-300 leading-8">
+          地震學最迷人的地方在於：它同時研究<strong class="text-cyan-200">抽象的波動物理</strong>、<strong class="text-amber-200">巨大的地球結構</strong>、
+          <strong class="text-rose-200">真實的社會災害</strong>，甚至還牽涉到國際安全。
+          同一條地震波，可以拿來研究地核、找石油、估算危害、監測核爆，這就是地震學的廣度與深度。
+        </p>
+      </div>
+    </section>
   </div>
 
   <script>
-    // 定義動畫 HTML 字串
-    const EarthAnimation = `
-      <div class="flex justify-center w-full py-6 bg-slate-800 rounded-xl">
-        <svg width="220" height="220" viewBox="0 0 200 200">
-          <circle cx="100" cy="100" r="90" fill="#8B4513" stroke="#A0522D" stroke-width="4" />
-          <circle cx="100" cy="100" r="50" fill="#D2691E" />
-          <circle cx="100" cy="100" r="20" fill="#FFD700" />
-          <circle cx="100" cy="10" r="4" fill="red" />
-          <text x="110" y="15" fill="white" font-size="10">震源</text>
-          <text x="25" y="100" fill="white" font-size="10">地函 (固態)</text>
-          <text x="65" y="130" fill="white" font-size="10">外核 (液態)</text>
-          <text x="85" y="105" fill="#333" font-size="10" font-weight="bold">內核</text>
-          <path d="M 100 10 Q 150 50 145 80" fill="none" stroke="#60A5FA" stroke-width="2" class="seismic-ray" />
-          <path d="M 145 80 Q 170 40 185 30" fill="none" stroke="#34D399" stroke-width="2" class="seismic-ray" style="animation-delay: 1.5s" />
-        </svg>
-      </div>`;
+    const animations = {
+      earthExplorer: `
+        <div class="glass rounded-3xl p-4 mt-5">
+          <h4 class="text-sm tracking-wide font-bold text-slate-300 mb-3">視覺化模型：地球內部探索</h4>
+          <div class="flex justify-center">
+            <svg width="320" height="220" viewBox="0 0 320 220" class="max-w-full h-auto">
+              <circle cx="110" cy="110" r="88" fill="#5b4337" stroke="#ac8466" stroke-width="2"/>
+              <circle cx="110" cy="110" r="56" fill="#a95522"/>
+              <circle cx="110" cy="110" r="28" fill="#ffd16d"/>
+              <circle cx="96" cy="34" r="4" fill="#ff6b6b" class="pulse-soft"/>
+              <text x="104" y="32" fill="#fff" font-size="11">震源</text>
+              <path d="M96 34 Q 145 72 152 115" fill="none" stroke="#8fe9ff" stroke-width="3" class="ray-line"/>
+              <path d="M96 34 Q 72 82 46 120" fill="none" stroke="#8cffd5" stroke-width="3" class="ray-line" style="animation-delay:1s"/>
+              <text x="220" y="64" fill="#f8d68a" font-size="12">S 波不能穿越液態外核</text>
+              <text x="208" y="85" fill="#cfdce5" font-size="12">這正是判斷外核液態的重要線索</text>
+            </svg>
+          </div>
+        </div>
+      `,
+      wavePhysics: `
+        <div class="glass rounded-3xl p-4 mt-5">
+          <h4 class="text-sm tracking-wide font-bold text-slate-300 mb-3">視覺化模型：反射、折射與波速差</h4>
+          <div class="flex justify-center">
+            <svg width="360" height="200" viewBox="0 0 360 200" class="max-w-full h-auto">
+              <rect x="20" y="25" width="320" height="70" rx="12" fill="#1a2c3a"/>
+              <rect x="20" y="95" width="320" height="80" rx="12" fill="#2e4353"/>
+              <line x1="20" y1="95" x2="340" y2="95" stroke="#d0d9df" stroke-dasharray="6 6"/>
+              <text x="34" y="50" fill="#dce7ef" font-size="12">低速層</text>
+              <text x="34" y="126" fill="#dce7ef" font-size="12">高速層</text>
+              <path d="M70 36 L 170 95" fill="none" stroke="#ffc470" stroke-width="4" class="wave-line" stroke-dasharray="100"/>
+              <path d="M170 95 L 270 52" fill="none" stroke="#8fe9ff" stroke-width="4" class="wave-line" style="animation-delay:.6s" stroke-dasharray="100"/>
+              <path d="M170 95 L 245 165" fill="none" stroke="#8cffd5" stroke-width="4" class="wave-line" style="animation-delay:1.1s" stroke-dasharray="100"/>
+              <text x="276" y="50" fill="#8fe9ff" font-size="12">反射</text>
+              <text x="250" y="168" fill="#8cffd5" font-size="12">折射</text>
+            </svg>
+          </div>
+        </div>
+      `,
+      plateTectonics: `
+        <div class="glass rounded-3xl p-4 mt-5">
+          <h4 class="text-sm tracking-wide font-bold text-slate-300 mb-3">視覺化模型：板塊隱沒帶</h4>
+          <div class="flex justify-center">
+            <svg width="370" height="220" viewBox="0 0 370 220" class="max-w-full h-auto">
+              <rect x="15" y="20" width="340" height="180" rx="18" fill="#0d1c29"/>
+              <path d="M170 72 L 330 72 L 330 180 L 220 180 Z" fill="#6f6a5f"/>
+              <g class="subduct">
+                <path d="M10 82 L 155 82 L 248 178 L 104 178 Z" fill="#276e9f"/>
+              </g>
+              <text x="40" y="68" fill="#9fe4ff" font-size="12">海洋板塊</text>
+              <text x="240" y="58" fill="#f0dcc2" font-size="12">大陸板塊</text>
+              <circle cx="182" cy="101" r="4" fill="#ffd26b" class="pulse-soft"/>
+              <circle cx="200" cy="121" r="4" fill="#ffd26b" class="pulse-soft" style="animation-delay:.4s"/>
+              <circle cx="222" cy="143" r="4" fill="#ffd26b" class="pulse-soft" style="animation-delay:.8s"/>
+              <text x="230" y="160" fill="#ffd26b" font-size="12">深層地震帶</text>
+            </svg>
+          </div>
+        </div>
+      `,
+      seismometer: `
+        <div class="glass rounded-3xl p-4 mt-5">
+          <h4 class="text-sm tracking-wide font-bold text-slate-300 mb-3">視覺化模型：地震儀與地震圖</h4>
+          <div class="flex justify-center">
+            <svg width="390" height="220" viewBox="0 0 390 220" class="max-w-full h-auto">
+              <rect x="12" y="15" width="366" height="190" rx="18" fill="#0d1c29"/>
+              <line x1="48" y1="150" x2="170" y2="150" stroke="#dce8ef" stroke-width="4"/>
+              <rect x="73" y="55" width="72" height="80" rx="6" fill="#8fe9ff"/>
+              <line x1="109" y1="45" x2="109" y2="115" stroke="#ffd16d" stroke-width="4"/>
+              <circle cx="109" cy="123" r="14" fill="#ffd16d" class="shake-soft"/>
+              <line x1="170" y1="55" x2="338" y2="55" stroke="rgba(255,255,255,.12)" />
+              <line x1="170" y1="90" x2="338" y2="90" stroke="rgba(255,255,255,.12)" />
+              <line x1="170" y1="125" x2="338" y2="125" stroke="rgba(255,255,255,.12)" />
+              <path d="M180 118 L 192 116 L 198 110 L 206 121 L 215 83 L 225 126 L 237 88 L 248 92 L 256 136 L 270 98 L 282 102 L 295 115 L 315 112"
+                    fill="none" stroke="#8cffd5" stroke-width="3"/>
+              <text x="43" y="172" fill="#dbe7ef" font-size="12">地面</text>
+              <text x="203" y="41" fill="#dbe7ef" font-size="12">Seismogram</text>
+            </svg>
+          </div>
+        </div>
+      `,
+      forecastBar: `
+        <div class="glass rounded-3xl p-4 mt-5">
+          <h4 class="text-sm tracking-wide font-bold text-slate-300 mb-3">視覺化模型：預報是機率，不是點名日期</h4>
+          <div class="flex justify-center">
+            <svg width="380" height="220" viewBox="0 0 380 220" class="max-w-full h-auto">
+              <rect x="14" y="18" width="352" height="184" rx="18" fill="#0d1c29"/>
+              <line x1="46" y1="170" x2="332" y2="170" stroke="#dce8ef" stroke-width="2"/>
+              <line x1="46" y1="42" x2="46" y2="170" stroke="#dce8ef" stroke-width="2"/>
+              <rect x="82" y="145" width="34" height="25" fill="#8fe9ff" class="bar-grow-1"/>
+              <rect x="170" y="132" width="34" height="38" fill="#ffd16d" class="bar-grow-2"/>
+              <rect x="258" y="152" width="34" height="18" fill="#ff8b79" class="bar-grow-3"/>
+              <text x="72" y="190" fill="#dbe7ef" font-size="11">模型 A</text>
+              <text x="160" y="190" fill="#dbe7ef" font-size="11">模型 B</text>
+              <text x="248" y="190" fill="#dbe7ef" font-size="11">模型 C</text>
+              <text x="90" y="52" fill="#f5d38a" font-size="12">不同模型 → 不同危害預報結果</text>
+            </svg>
+          </div>
+        </div>
+      `,
+      mbMs: `
+        <div class="glass rounded-3xl p-4 mt-5">
+          <h4 class="text-sm tracking-wide font-bold text-slate-300 mb-3">視覺化模型：mb 與 Ms 區分地震與爆炸</h4>
+          <div class="flex justify-center">
+            <svg width="380" height="230" viewBox="0 0 380 230" class="max-w-full h-auto">
+              <rect x="12" y="16" width="356" height="198" rx="18" fill="#0d1c29"/>
+              <line x1="54" y1="180" x2="332" y2="180" stroke="#dce8ef" stroke-width="2"/>
+              <line x1="54" y1="36" x2="54" y2="180" stroke="#dce8ef" stroke-width="2"/>
+              <text x="150" y="204" fill="#dce8ef" font-size="12">面波震級 Ms</text>
+              <text x="20" y="116" fill="#dce8ef" font-size="12" transform="rotate(-90 20 116)">體波震級 mb</text>
+              <circle cx="116" cy="140" r="5" fill="#8cffd5"/>
+              <circle cx="154" cy="118" r="5" fill="#8cffd5"/>
+              <circle cx="194" cy="97" r="5" fill="#8cffd5"/>
+              <circle cx="228" cy="74" r="5" fill="#8cffd5"/>
+              <text x="238" y="76" fill="#8cffd5" font-size="12">天然地震</text>
+              <circle cx="108" cy="68" r="5" fill="#ff8b79"/>
+              <circle cx="132" cy="54" r="5" fill="#ff8b79"/>
+              <circle cx="146" cy="42" r="5" fill="#ff8b79"/>
+              <text x="160" y="48" fill="#ff8b79" font-size="12">核子試爆</text>
+            </svg>
+          </div>
+        </div>
+      `,
+      stressStrain: `
+        <div class="glass rounded-3xl p-4 mt-5">
+          <h4 class="text-sm tracking-wide font-bold text-slate-300 mb-3">視覺化模型：應力、應變與剪切</h4>
+          <div class="flex justify-center">
+            <svg width="360" height="210" viewBox="0 0 360 210" class="max-w-full h-auto">
+              <rect x="12" y="14" width="336" height="182" rx="18" fill="#0d1c29"/>
+              <line x1="56" y1="168" x2="304" y2="168" stroke="#96a6b3" stroke-width="4"/>
+              <g class="plate-shift">
+                <polygon points="122,68 206,68 226,142 142,142" fill="#8b8cff" fill-opacity=".9"/>
+                <line x1="142" y1="68" x2="162" y2="142" stroke="#d3d4ff" stroke-dasharray="4 4"/>
+                <line x1="162" y1="68" x2="182" y2="142" stroke="#d3d4ff" stroke-dasharray="4 4"/>
+                <line x1="182" y1="68" x2="202" y2="142" stroke="#d3d4ff" stroke-dasharray="4 4"/>
+              </g>
+              <line x1="38" y1="78" x2="104" y2="78" stroke="#ffd16d" stroke-width="4"/>
+              <polygon points="104,72 118,78 104,84" fill="#ffd16d"/>
+              <line x1="322" y1="132" x2="256" y2="132" stroke="#ffd16d" stroke-width="4"/>
+              <polygon points="256,126 242,132 256,138" fill="#ffd16d"/>
+              <text x="32" y="62" fill="#ffd16d" font-size="12">施加應力</text>
+              <text x="126" y="30" fill="#dbe7ef" font-size="12">變形後形狀 = 應變</text>
+            </svg>
+          </div>
+        </div>
+      `
+    };
 
-    const WavePhysicsAnimation = `
-      <div class="flex justify-center w-full py-6 bg-slate-800 rounded-xl">
-        <svg width="250" height="150" viewBox="0 0 250 150">
-          <rect x="0" y="0" width="250" height="75" fill="#1E293B" />
-          <rect x="0" y="75" width="250" height="75" fill="#334155" />
-          <line x1="0" y1="75" x2="250" y2="75" stroke="#94A3B8" stroke-width="2" stroke-dasharray="4,4" />
-          <text x="10" y="20" fill="#94A3B8" font-size="12">岩層 A (低速)</text>
-          <text x="10" y="140" fill="#94A3B8" font-size="12">岩層 B (高速)</text>
-          <line x1="50" y1="10" x2="125" y2="75" stroke="#FBBF24" stroke-width="3" class="beam" />
-          <line x1="125" y1="75" x2="200" y2="10" stroke="#60A5FA" stroke-width="2" class="beam" style="animation-delay: 1s" />
-          <line x1="125" y1="75" x2="175" y2="140" stroke="#34D399" stroke-width="3" class="beam" style="animation-delay: 1s" />
-          <text x="180" y="130" fill="#34D399" font-size="12">折射波</text>
-          <text x="205" y="25" fill="#60A5FA" font-size="12">反射波</text>
-        </svg>
-      </div>`;
-
-    const PlateTectonicsAnimation = `
-      <div class="flex justify-center w-full py-6 bg-slate-800 rounded-xl">
-        <svg width="250" height="150" viewBox="0 0 250 150">
-          <path d="M 120 40 L 250 40 L 250 150 L 150 150 Z" fill="#78716C" stroke="#444" stroke-width="2" />
-          <text x="160" y="60" fill="white" font-size="12">大陸板塊</text>
-          <g class="subducting-plate">
-            <path d="M -20 50 L 100 50 L 180 130 L 60 130 Z" fill="#0369A1" stroke="#444" stroke-width="2" />
-            <text x="20" y="70" fill="white" font-size="12">海洋板塊</text>
-          </g>
-          <polygon points="170,40 160,10 180,10" fill="#EF4444" />
-          <circle cx="130" cy="70" r="4" fill="#FBBF24" />
-          <circle cx="145" cy="85" r="4" fill="#FBBF24" />
-          <circle cx="160" cy="100" r="4" fill="#FBBF24" />
-          <text x="135" y="115" fill="#FBBF24" font-size="10">深層地震</text>
-        </svg>
-      </div>`;
-
-    const QuakeVsNukeChart = `
-      <div class="flex flex-col items-center w-full py-6 bg-slate-800 rounded-xl">
-        <p class="mb-4 text-sm text-center text-slate-300">體波震級 (mb) vs 面波震級 (Ms)</p>
-        <svg width="250" height="150" viewBox="0 0 250 150">
-          <line x1="30" y1="130" x2="230" y2="130" stroke="white" stroke-width="2" />
-          <line x1="30" y1="10" x2="30" y2="130" stroke="white" stroke-width="2" />
-          <text x="110" y="145" fill="white" font-size="10">面波震級 (Ms)</text>
-          <text x="5" y="75" fill="white" font-size="10" transform="rotate(-90 10,75)">體波 (mb)</text>
-          <circle cx="80" cy="100" r="4" fill="#34D399" />
-          <circle cx="120" cy="80" r="4" fill="#34D399" />
-          <circle cx="160" cy="60" r="4" fill="#34D399" />
-          <text x="170" y="65" fill="#34D399" font-size="12">天然地震</text>
-          <circle cx="60" cy="40" r="4" fill="#EF4444" />
-          <circle cx="80" cy="30" r="4" fill="#EF4444" />
-          <circle cx="90" cy="20" r="4" fill="#EF4444" />
-          <text x="100" y="25" fill="#EF4444" font-size="12">核子試爆</text>
-          <line x1="30" y1="130" x2="200" y2="40" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3,3" />
-        </svg>
-      </div>`;
-
-    const StressStrainAnimation = `
-      <div class="flex justify-center w-full py-6 bg-slate-800 rounded-xl">
-        <svg width="200" height="150" viewBox="0 0 200 150">
-          <g class="strain-box">
-            <rect x="60" y="40" width="80" height="80" fill="#6366F1" stroke="#4F46E5" stroke-width="2" fill-opacity="0.7"/>
-            <line x1="80" y1="40" x2="80" y2="120" stroke="#4F46E5" stroke-width="1" stroke-dasharray="2,2" />
-            <line x1="100" y1="40" x2="100" y2="120" stroke="#4F46E5" stroke-width="1" stroke-dasharray="2,2" />
-            <line x1="120" y1="40" x2="120" y2="120" stroke="#4F46E5" stroke-width="1" stroke-dasharray="2,2" />
-          </g>
-          <g class="force-arrow">
-            <line x1="10" y1="40" x2="50" y2="40" stroke="#FBBF24" stroke-width="3" />
-            <polygon points="50,35 60,40 50,45" fill="#FBBF24" />
-            <text x="10" y="30" fill="#FBBF24" font-size="12">剪應力 (Stress)</text>
-          </g>
-          <line x1="40" y1="120" x2="160" y2="120" stroke="#94A3B8" stroke-width="4" />
-          <text x="80" y="140" fill="white" font-size="12">物體變形 (Strain)</text>
-        </svg>
-      </div>`;
-
-    // 資料結構
     const topics = [
-      { id: 1, category: "基礎理論", icon: "book-open", iconColor: "text-blue-500", title: "1. 地震學的定義與範疇", question: "地震學難道只研究『天然的地震』嗎？", answer: "不只！它研究的是『所有地震波』在地球介質中的傳播。", explanation: "地震學 (Seismology) 是研究固體地球中彈性波（或聲波）的科學。這些波的來源可以是自然現象，如板塊錯動引發的地震；也可以是人工事件，例如礦場採石爆破、甚至是核子武器試爆。只要能產生波並在地球內部傳播，都是地震學家研究的範疇！", animation: null },
-      { id: 2, category: "基礎理論", icon: "globe", iconColor: "text-emerald-500", title: "2. 地球內部結構的探索", question: "人類鑽井最深才十幾公里，怎麼知道地心有一層液態的外核？", answer: "我們用地震波幫地球拍「X光片」！", explanation: "因為地球深處無法直接觀測，地震波成了我們繪製地球內部圖像（地殼、地函、外核、內核）的主要工具。科學家發現，某一種地震波（S波，剪力波）無法穿透液體。當大地震發生時，地球對面的地震儀接收不到 S波，這成為了證明地球深處有一個「液態外核」的最有力證據！", animation: EarthAnimation },
-      { id: 3, category: "基礎理論", icon: "activity", iconColor: "text-purple-500", title: "3. 地震波的物理特性", question: "地震波在地底下是像直線一樣前進的嗎？", answer: "不是喔！它就像光穿過水一樣，會發生折射、反射與繞射。", explanation: "地震波的傳播行為與光波或聲波非常相似。地球內部並不是均勻的一塊大石頭，而是充滿了密度和堅硬度不同的岩層。\n當地震波從軟岩層進入硬岩層時，它的速度會改變，導致路徑發生彎曲，這就是「折射 (Refraction)」。如果遇到像地函與地核的邊界這種性質劇烈改變的地方，甚至會像照鏡子一樣發生「反射 (Reflection)」。科學家就是利用這些彎曲與反射的時間差，推算出地下構造的秘密。", animation: WavePhysicsAnimation },
-      { id: 4, category: "觀測與應用", icon: "map", iconColor: "text-orange-500", title: "4. 板塊構造論的典範轉移", question: "為什麼地震總是集中在某些特定的國家或地區？", answer: "因為地球的表面是一塊塊拼圖，而地震就發生在拼圖摩擦的邊界！", explanation: "在 1960 年代後期，地球科學界發生了「板塊構造革命」。在那之前，人們不明白為什麼中洋脊、海溝、造山運動和地震總是相伴而生。板塊構造論將這些現象完美地連結了起來：地球的外殼由多個板塊組成，它們漂浮在軟流圈上移動。當板塊互相碰撞、隱沒（例如太平洋板塊擠壓日本或台灣）或分離時，就會產生巨大的能量，引發頻繁的破壞性地震。", animation: PlateTectonicsAnimation },
-      { id: 5, category: "觀測與應用", icon: "monitor", iconColor: "text-teal-500", title: "5. 地震儀與地震紀錄分析", question: "地震儀畫出的那些上下起伏的線條，能告訴我們什麼秘密？", answer: "它就像地震的「指紋」，包含了震源有多大、以及波經過了哪些地方。", explanation: "地震圖 (Seismogram) 是地震儀記錄下來的地面運動軌跡。透過分析這些波形的振幅大小、到達時間的先後（例如跑得快的P波先到，破壞力強的S波後到），地震學家可以計算出地震發生在哪裡（定位）、能量有多大（規模），甚至能推測出斷層是上下錯動還是水平滑動（震源機制）。", animation: null },
-      { id: 6, category: "社會與防災", icon: "target", iconColor: "text-rose-500", title: "6. 地震預測的挑戰與爭議", question: "現在科技這麼發達，為什麼還不能像報天氣一樣準確預報地震？", answer: "因為地底下的物理環境太複雜了，這依然是科學界的未解之謎。", explanation: "氣象可以看雲圖，但我們無法直接看到地底 10 公里深處的岩石狀態。歷史上有許多著名的預測實驗，例如美國加州的帕克菲爾德 (Parkfield) 實驗。科學家預測該地在 1988 年至 1993 年間會發生大地震，並佈滿了監測儀器，結果地震遲至 2004 年才發生。\n這說明了：雖然我們知道哪裡「遲早」會發生地震（長期機率），但要精確指出「哪一天、幾點發生」目前仍具有極大挑戰。", animation: null },
-      { id: 7, category: "社會與防災", icon: "alert-triangle", iconColor: "text-yellow-600", title: "7. 地震對社會的危害評估", question: "地震最大的危險只有房屋倒塌嗎？", answer: "不，地震引發的「衍生災害」往往造成更慘重的傷亡。", explanation: "評估地震危害不能只看震動本身。歷史上的悲劇告訴我們衍生災害的可怕：\n例如 1556 年中國陝西大地震，引發了大規模的黃土洞穴坍塌，導致極大傷亡；而 1923 年的日本東京大地震（關東大地震），因為當時正值中午煮飯時間，傾倒的爐火引發了無法控制的城市大火。此外，海底地震引發的「海嘯 (Tsunami)」更是沿海國家的巨大威脅。", animation: null },
-      { id: 8, category: "社會與防災", icon: "radio", iconColor: "text-indigo-500", title: "8. 核子試爆監測技術", question: "如果有國家偷偷在地底試爆核彈，別人會知道嗎？", answer: "絕對逃不過國際監測系統 (IMS) 的「千里耳」。", explanation: "為了維持世界和平與條約驗證，全球建立了一個嚴密的國際監測系統 (IMS)。這個系統不只依靠地震儀來捕捉地下的震波，還結合了水聲網路（偵測海洋中的爆炸聲）以及次聲波網路（偵測大氣中低頻的聲波）。只要地球上發生不尋常的巨大能量釋放，各國的科學家馬上就能收到數據並進行分析。", animation: null },
-      { id: 9, category: "社會與防災", icon: "shield-alert", iconColor: "text-red-500", title: "9. 地震與爆炸的區分", question: "地震儀上看到的波，怎麼知道是天然地震還是核爆？", answer: "因為核彈爆炸是「向外膨脹」，而地震是「斷層滑動」，兩者產生的波形特徵完全不同！", explanation: "這是一個非常實用的技術。爆炸（如核爆）在瞬間向四面八方產生強大的壓縮力，因此會產生異常巨大的 P波（壓縮波）。\n科學家會比較一個事件的「體波震級 (mb)」與「面波震級 (Ms)」。天然地震的這兩種震級通常呈正相關；但對於核試爆來說，為了產生相同的面波震級，它的體波震級 (mb) 會顯得「異常地高」。看圖表就能一眼區分出兩者的不同群體！", animation: QuakeVsNukeChart },
-      { id: 10, category: "基礎理論", icon: "box", iconColor: "text-cyan-500", title: "10. 固體力學基礎", question: "物理學家是用什麼數學工具來研究地震波的？", answer: "他們使用「應力張量」與「運動方程式」來描述岩石的推擠與變形。", explanation: "要精確計算地震波，我們必須回到物理學的根本：固體力學。想像一塊地下的岩石被擠壓。\n施加在岩石上的力量稱為「應力 (Stress)」，而岩石因為受力而發生的形狀改變稱為「應變 (Strain)」。科學家透過複雜的數學矩陣（應力張量）來描述各個方向的力量，再利用運動方程式計算出：當力量釋放時，這股能量會以多快的速度、用什麼樣的波形傳遍整個地球。", animation: StressStrainAnimation }
+      {
+        id: 1,
+        category: "基礎核心",
+        icon: "book-open-check",
+        iconColor: "text-amber-300",
+        title: "1. 地震學的定義與範疇",
+        question: "地震學是不是只研究天然地震？",
+        answer: "不是。它研究的是由天然或人工來源產生的彈性波，如何在地球介質中傳播。",
+        explanation: `
+          <p class="leading-8 text-slate-300">
+            地震學表面上像是在研究「地震」，但更精確地說，它研究的是<strong class="text-white">波動</strong>。
+            只要有一個能量來源讓地球材料振動，不管是天然地震、火山活動、山崩、核爆，還是人工震源探勘，地震學都能介入分析。
+          </p>
+          <p class="leading-8 text-slate-300 mt-3">
+            所以地震學不只是「災害學」，也是<strong class="text-amber-200">地球內部成像工具</strong>、
+            <strong class="text-cyan-200">資源探勘工具</strong>、甚至是<strong class="text-rose-200">國際核試監測工具</strong>。
+          </p>
+          <div class="note-box rounded-2xl p-4 mt-4 text-sm text-slate-200 leading-7">
+            簡單說：地震學研究的不是只有「地震事件」，而是「訊號怎麼產生、怎麼傳、怎麼被記錄、怎麼被解讀」。
+          </div>
+        `,
+        animation: null
+      },
+      {
+        id: 2,
+        category: "基礎核心",
+        icon: "globe-2",
+        iconColor: "text-cyan-300",
+        title: "2. 地球內部結構的探索",
+        question: "人類鑽不到地心，怎麼知道地函、外核、內核的存在？",
+        answer: "靠地震波的走時、折射、反射、陰影區與是否能穿越液體，去反推地球內部。",
+        explanation: `
+          <p class="leading-8 text-slate-300">
+            地球半徑約 6371 公里，但人類鑽井深度只占非常小的一部分。真正讓我們知道地球內部分層的，是全球大地震發出的地震波。
+          </p>
+          <p class="leading-8 text-slate-300 mt-3">
+            例如 <strong class="text-white">P 波</strong>能穿過固體與液體，<strong class="text-white">S 波</strong>只能穿過固體，
+            所以當某些區域接收不到 S 波時，科學家就知道地球深處某一層必須是液態，這就是液態外核的重要證據。
+          </p>
+          <p class="leading-8 text-slate-300 mt-3">
+            進一步來說，P 波在進出不同層時會改變速度與路徑，於是我們不只知道有分層，還能知道邊界大概在哪裡，以及各層的彈性性質有什麼差異。
+          </p>
+        `,
+        animation: animations.earthExplorer
+      },
+      {
+        id: 3,
+        category: "波動物理",
+        icon: "activity",
+        iconColor: "text-violet-300",
+        title: "3. 地震波的物理特性",
+        question: "地震波在地下是直線前進嗎？",
+        answer: "通常不是。它像光一樣會折射、反射、繞射，也會因介質不均勻而散射。",
+        explanation: `
+          <p class="leading-8 text-slate-300">
+            如果地球內部完全均一，地震波才比較接近直線傳播。但真實地球不是這樣：密度、彈性、溫度、成分都會改變波速。
+          </p>
+          <p class="leading-8 text-slate-300 mt-3">
+            所以當地震波穿過不同速度的層時，它的路徑會彎曲。遇到明顯界面會反射；遇到障礙物與尖銳結構時會繞射；穿過很多不均質時則會散射。
+          </p>
+          <div class="note-box rounded-2xl p-4 mt-4 text-sm text-slate-200 leading-7">
+            這也是為什麼同一場地震在不同測站看到的波形會差很多：不是地震自己變了，而是每條路徑經過的地下世界不同。
+          </div>
+        `,
+        animation: animations.wavePhysics
+      },
+      {
+        id: 4,
+        category: "構造地球",
+        icon: "mountain",
+        iconColor: "text-emerald-300",
+        title: "4. 板塊構造論的典範轉移",
+        question: "為什麼大地震總集中在某些區域？",
+        answer: "因為地球表面由多個移動板塊組成，地震大多發生在板塊交界的碰撞、隱沒、張裂與錯動區。",
+        explanation: `
+          <p class="leading-8 text-slate-300">
+            1960 年代後期板塊構造革命之後，地震學不再只是描述「哪裡震了」，而是開始問：
+            這些地震和全球板塊運動有什麼系統性關係？
+          </p>
+          <p class="leading-8 text-slate-300 mt-3">
+            結果發現，地震活動和中洋脊、海溝、轉形斷層、造山帶高度對應。尤其在隱沒帶，地震會沿著下插板塊形成傾斜的深震帶，這正是板塊正在沉入地函的證據。
+          </p>
+        `,
+        animation: animations.plateTectonics
+      },
+      {
+        id: 5,
+        category: "觀測與分析",
+        icon: "audio-lines",
+        iconColor: "text-cyan-300",
+        title: "5. 地震儀與地震紀錄分析",
+        question: "地震圖到底能告訴我們什麼？",
+        answer: "它同時記錄了震源性質、傳播路徑、場址效應，是一份非常濃縮的地球資訊。",
+        explanation: `
+          <p class="leading-8 text-slate-300">
+            一條 seismogram 不只是「波形」而已。它包含：震源在什麼時間發生、能量多大、破裂方式是推還是拉、波經過哪些深層界面、最後到站時又被當地地層放大了多少。
+          </p>
+          <p class="leading-8 text-slate-300 mt-3">
+            最基本的用途是用 P 波與 S 波抵達時間差定位震源；更進一步還可以做震源機制、矩震級、地球結構反演、場址反應分析。
+          </p>
+        `,
+        animation: animations.seismometer
+      },
+      {
+        id: 6,
+        category: "預測與爭議",
+        icon: "target",
+        iconColor: "text-rose-300",
+        title: "6. 地震預測的挑戰與爭議",
+        question: "為什麼地震不能像天氣那樣精準預報？",
+        answer: "因為震源區在地下深處，破裂前的狀態難以直接觀測，而且前兆不穩定、不可重複。",
+        explanation: `
+          <p class="leading-8 text-slate-300">
+            地震的難，不只是資料少，而是破裂本身是一個高度非線性的臨界過程。很多斷層長年累積應變，但到底什麼時候會突然失穩，往往差一點點條件就完全不同。
+          </p>
+          <p class="leading-8 text-slate-300 mt-3">
+            以 Parkfield 實驗為例，科學家曾經期待某段聖安地列斯斷層能按照過去週期「準時」發震，結果真正地震發生時間卻明顯偏離預期。
+            這說明了：即使是最密集觀測的天然實驗場，也很難做到精準預測。
+          </p>
+        `,
+        animation: animations.forecastBar
+      },
+      {
+        id: 7,
+        category: "社會與防災",
+        icon: "shield-half",
+        iconColor: "text-amber-300",
+        title: "7. 地震對社會的危害評估",
+        question: "地震的傷害只有地面搖晃嗎？",
+        answer: "不只。海嘯、火災、山崩、液化、建築倒塌、基礎設施中斷，常常比『搖晃本身』更致命。",
+        explanation: `
+          <p class="leading-8 text-slate-300">
+            地震危害不只是地動強度。像 1556 年陝西地震中的黃土洞穴坍塌、1923 年關東地震後的大火、海底地震引發的海嘯，這些都說明災害鏈往往比主震本身更可怕。
+          </p>
+          <p class="leading-8 text-slate-300 mt-3">
+            所以現代危害評估會同時考慮地表加速度、地表速度、持時、斷層位移、液化潛勢、地形放大、人口暴露量與建築脆弱度。
+          </p>
+        `,
+        animation: null
+      },
+      {
+        id: 8,
+        category: "國際監測",
+        icon: "radio-tower",
+        iconColor: "text-cyan-300",
+        title: "8. 核子試爆監測技術",
+        question: "如果有人秘密地下核試爆，真的能被發現嗎？",
+        answer: "能。國際監測系統 IMS 會透過地震、水聲、次聲與放射性監測來追蹤可疑事件。",
+        explanation: `
+          <p class="leading-8 text-slate-300">
+            地下核爆會把大量能量快速、近似球對稱地注入地下，因此會產生與天然斷層破裂不同的波場特徵。
+            全世界的監測站會記錄到這些訊號，再結合位置、深度、波形比例與其他監測資料判斷是否為核試。
+          </p>
+          <p class="leading-8 text-slate-300 mt-3">
+            也就是說，地震學不只是自然科學的一部分，也和國際政治、軍備管制與核禁試條約直接相關。
+          </p>
+        `,
+        animation: null
+      },
+      {
+        id: 9,
+        category: "訊號判讀",
+        icon: "scan-search",
+        iconColor: "text-rose-300",
+        title: "9. 地震與爆炸的區分",
+        question: "天然地震與核爆，波形上有什麼差別？",
+        answer: "核爆通常 P 波較強、表面波較弱，因此 mb 相對 Ms 偏高；天然地震則常有較明顯的剪力破裂與表面波。",
+        explanation: `
+          <p class="leading-8 text-slate-300">
+            天然地震多半來自斷層錯動，會產生明顯的剪切運動；而地下核爆比較像突然向外擠壓，所以體波特徵與面波比例常不同。
+          </p>
+          <p class="leading-8 text-slate-300 mt-3">
+            常見判別方法之一是把體波震級 mb 和面波震級 Ms 拿來比較。若某事件 mb 很高但 Ms 相對偏低，就可能是爆炸訊號。
+            當然，實際判讀通常還會搭配更多波形、頻譜與多站資訊，不會只憑一個指標就下結論。
+          </p>
+        `,
+        animation: animations.mbMs
+      },
+      {
+        id: 10,
+        category: "數學基礎",
+        icon: "box-select",
+        iconColor: "text-violet-300",
+        title: "10. 固體力學基礎：Stress、Strain 與運動方程式",
+        question: "地震波研究的數學框架是什麼？",
+        answer: "是固體力學。核心包括應力張量、應變、材料本構關係，以及牛頓第二定律形成的運動方程式。",
+        explanation: `
+          <p class="leading-8 text-slate-300">
+            地震波不是抽象「會震的線」，而是固體介質受到力之後產生的微小變形在空間與時間中的傳播。
+          </p>
+          <p class="leading-8 text-slate-300 mt-3">
+            其中 <strong class="text-white">應力（stress）</strong>描述單位面積上的內力，
+            <strong class="text-white">應變（strain）</strong>描述材料的變形量，
+            再配合材料的彈性常數與運動方程式，就能推導出 P 波與 S 波的傳播速度與形式。
+          </p>
+          <div class="note-box rounded-2xl p-4 mt-4 text-sm text-slate-200 leading-7">
+            也就是說，地震學之所以能「算」地震波，不是因為記憶很多波名，而是因為背後有完整的連續介質力學。
+          </div>
+        `,
+        animation: animations.stressStrain
+      }
     ];
 
-    const container = document.getElementById('topics-container');
-    let openTopicId = 1; // 預設打開第一個
+    const container = document.getElementById("topics-container");
+    let openTopicId = 1;
 
-    // 生成 DOM
     topics.forEach(topic => {
       const isOpen = topic.id === openTopicId;
-      
-      const topicDiv = document.createElement('div');
-      topicDiv.className = `topic-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:border-indigo-300 ${isOpen ? 'open' : ''}`;
-      
-      topicDiv.innerHTML = `
-        <button class="flex items-center justify-between w-full p-5 text-left transition-colors hover:bg-slate-50" onclick="toggleTopic(${topic.id})">
-          <div class="flex items-center space-x-4">
-            <div class="p-2 bg-slate-100 rounded-lg">
-              <i data-lucide="${topic.icon}" class="w-6 h-6 ${topic.iconColor}"></i>
+
+      const card = document.createElement("div");
+      card.className = `topic-card section-card rounded-3xl overflow-hidden transition-all duration-300 ${isOpen ? "open" : ""}`;
+
+      card.innerHTML = `
+        <button class="w-full px-5 py-5 md:px-6 md:py-6 text-left hover:bg-white/[0.03] transition" onclick="toggleTopic(${topic.id})">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start gap-4">
+              <div class="rounded-2xl bg-white/5 border border-white/10 p-3 shrink-0">
+                <i data-lucide="${topic.icon}" class="w-6 h-6 ${topic.iconColor}"></i>
+              </div>
+              <div>
+                <div class="small-kicker">${topic.category}</div>
+                <h3 class="mt-1 text-xl md:text-2xl font-black text-white">${topic.title}</h3>
+              </div>
             </div>
-            <div>
-              <span class="text-xs font-semibold tracking-wider text-indigo-500 uppercase">${topic.category}</span>
-              <h3 class="text-xl font-bold text-slate-800 mt-1">${topic.title}</h3>
+            <div id="chev-${topic.id}" class="chev ${isOpen ? "open" : ""} shrink-0 mt-1">
+              <i data-lucide="chevron-down" class="w-6 h-6 text-slate-300"></i>
             </div>
-          </div>
-          <div class="chevron ${isOpen ? 'open' : ''}" id="chevron-${topic.id}">
-            <i data-lucide="chevron-down" class="w-6 h-6 text-slate-400"></i>
           </div>
         </button>
-        
-        <div id="content-${topic.id}" class="topic-content overflow-hidden ${isOpen ? 'open' : ''}">
-          <div class="p-6 pt-2 border-t border-slate-100 bg-slate-50/50">
-            <div class="p-5 mb-6 rounded-lg bg-white border border-indigo-100 shadow-sm">
-              <p class="font-semibold text-slate-800 mb-3 flex items-start">
-                <span class="inline-block px-2 py-1 mr-3 text-xs font-bold text-white bg-indigo-500 rounded">提問</span>
-                <span class="mt-0.5">${topic.question}</span>
-              </p>
-              <p class="font-bold text-indigo-700 flex items-start">
-                <span class="inline-block px-2 py-1 mr-3 text-xs font-bold text-white bg-rose-500 rounded">大師解答</span>
-                <span class="mt-0.5">${topic.answer}</span>
-              </p>
-            </div>
-            
-            <div class="mb-6 whitespace-pre-wrap text-slate-700 leading-relaxed px-2 text-justify">
-              ${topic.explanation}
+
+        <div id="content-${topic.id}" class="topic-content ${isOpen ? "open" : ""}">
+          <div class="px-5 pb-6 md:px-6 md:pb-7 border-t border-white/10 bg-white/[0.02]">
+            <div class="grid grid-cols-1 lg:grid-cols-[1.05fr_.95fr] gap-5 mt-5">
+              <div class="glass rounded-3xl p-5">
+                <p class="faq-q">提問</p>
+                <p class="mt-2 text-lg font-bold text-white leading-8">${topic.question}</p>
+
+                <p class="faq-a mt-5">解答</p>
+                <p class="mt-2 text-lg font-bold text-cyan-100 leading-8">${topic.answer}</p>
+              </div>
+
+              <div class="glass rounded-3xl p-5">
+                <h4 class="font-bold text-amber-200">為什麼這一題重要？</h4>
+                <p class="mt-2 text-slate-300 leading-8">
+                  這一題不是只背名詞，而是在建立地震學的觀念骨架。只要這一題懂了，後面的附圖、危害圖、預測問題、核爆監測就比較容易串起來。
+                </p>
+              </div>
             </div>
 
-            ${topic.animation ? `
-            <div class="mt-6 px-2">
-              <h4 class="text-sm font-bold text-slate-500 mb-3 tracking-wide">視覺化模型展示</h4>
-              ${topic.animation}
-            </div>` : ''}
+            <div class="mt-5 glass rounded-3xl p-5">
+              ${topic.explanation}
+              ${topic.animation || ""}
+            </div>
           </div>
         </div>
       `;
-      
-      container.appendChild(topicDiv);
+
+      container.appendChild(card);
     });
 
-    // 實例化 Lucide 圖示
-    lucide.createIcons();
+    function toggleTopic(id){
+      const same = openTopicId === id;
 
-    // 處理展開與收合的邏輯
-    function toggleTopic(id) {
-      const isCurrentlyOpen = openTopicId === id;
-      
-      // 關閉所有面板
-      document.querySelectorAll('.topic-content').forEach(el => el.classList.remove('open'));
-      document.querySelectorAll('.chevron').forEach(el => el.classList.remove('open'));
-      document.querySelectorAll('.topic-card').forEach(el => el.classList.remove('open'));
-      
-      if (!isCurrentlyOpen) {
-        // 打開被點擊的面板
-        document.getElementById(`content-${id}`).classList.add('open');
-        document.getElementById(`chevron-${id}`).classList.add('open');
-        document.getElementById(`content-${id}`).closest('.topic-card').classList.add('open');
+      document.querySelectorAll(".topic-content").forEach(el => el.classList.remove("open"));
+      document.querySelectorAll(".topic-card").forEach(el => el.classList.remove("open"));
+      document.querySelectorAll(".chev").forEach(el => el.classList.remove("open"));
+
+      if(!same){
+        document.getElementById(`content-${id}`).classList.add("open");
+        document.getElementById(`chev-${id}`).classList.add("open");
+        document.getElementById(`content-${id}`).closest(".topic-card").classList.add("open");
         openTopicId = id;
-      } else {
+      }else{
         openTopicId = null;
       }
     }
+
+    lucide.createIcons();
   </script>
 </body>
 </html>
